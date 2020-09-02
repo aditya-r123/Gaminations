@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Animations</title>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript"
+        src="https://static.codehs.com/gulp/d07a4ef9e3f06b69e1b3e361697c7c4216ad6ae0/chs-js-lib/chs.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: inline-block;
+            vertical-align: top;
+            margin-left: 34%;
+        }
+
+        .about {
+            text-align: center;
+            color: blue;
+        }
+
+        #backButton {
+            position: relative;
+            left: 37%;
+        }
+
+        #backMessage {
+            position: relative;
+            left: 50%;
+            bottom: 60px;
+        }
+
+
+        #info {
+            text-align: center;
+        }
+
+        .linking {
+            padding: 5px;
+        }
+
+        .linking:hover {
+            background-color: blue;
+        }
+        body{
+            padding: 10px;
+            font-family: serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="about">Animations</h1><br />
+    <nav>
+        <a href="index.html" id="backButton"><img src="BackButton.png" alt="Image of a backbutton." /></a>
+        <p id="backMessage">Click the back button to return to the home page.</p>
+    </nav>
+    <h3 class="about">Please click the links for instructions on each activity:</h3>
+    <div class="container">
+        <nav>
+            <div class="row">
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(1)" class="linking">Splatter Instructions</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(2)" class="linking">Pac Snow Instructions</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(3)" class="linking">Confetti Instructions</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(4)" class="linking">Bounce Instructions</a>
+                </div> 
+            </div>
+        </nav>
+    </div>
+    <br/>
+    <p id="info">Please select a link for instructions.</p>
+    <script>
+        function updateInfo(num) {
+            switch (num) {
+                case 1:
+                    $("#info").html("Splatter Instructions: Watch the canvas get splattered all over with paint!");
+                    break;
+                case 2:
+                    $("#info").html("Pac Snow Instructions: Watch PacMan get covered in Pac Snow!");
+                    break;
+                case 3:
+                    $("#info").html("Confetti Instructions: Click anywhere on the screen for confetti.");
+                    break;
+                case 4:
+                    $("#info").html("Bounce Instructions: Watch the ball bounce around the screen. Click the up and down arrows to change the ball speed. Click the “A” and “D” keys to change the ball size. ");
+                    break;
+                default:
+                    $("#info").html("Please select a link for instructions.");
+            }
+        }
+    </script>
+        <canvas width="400" height="500" class="codehs-editor-canvas"></canvas>
+    <script>
+
+        window.onload = function () {
+
+
+            var cdMusic = new Audio("https://codehs.com/uploads/fa9239bf1f8147764e859b0528b0ba5b");
+            //Selection Screen
+            var sprectangles = [];
+            var sptexting = [];
+            var bg;
+            var projNameTxt;
+
+            function start() {
+
+
+
+                bg = new Rectangle(getWidth(), 115);
+                bg.setPosition(0, 0);
+                bg.setColor("#dcd9ff");
+                add(bg);
+
+
+
+
+                projNameTxt = new Text("Animations", "35pt Verdana");
+                projNameTxt.setPosition(getWidth() / 2 - projNameTxt.getWidth() / 2, 65);
+                projNameTxt.setColor("#7700b8");
+                add(projNameTxt);
+
+
+
+
+                spmakeRect(0, getHeight() - 2 * getHeight() / 2.5, Color.red);
+                spmakeRect(getWidth() / 2, getHeight() - 2 * getHeight() / 2.5, Color.cyan);
+                spmakeRect(0, getHeight() - getHeight() / 2.5, Color.green);
+                spmakeRect(getWidth() / 2, getHeight() - getHeight() / 2.5, Color.yellow);
+                spmakeText("Splatter", getWidth() / 4, getHeight() / 2.5, 20);
+                spmakeText("Pac Snow", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                spmakeText("Confetti", getWidth() / 4, getHeight() * 4 / 5, 20);
+                spmakeText("Bounce", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+
+                mouseClickMethod(spselectMode);
+
+
+            }
+
+
+
+            function spmakeRect(x, y, color) {
+                var rect = new Rectangle(getWidth() / 2, getHeight() / 2.5);
+                rect.setPosition(x, y);
+                rect.setColor(color);
+                sprectangles.push(rect);
+                add(rect);
+            }
+
+            function spmakeText(message, x, y, size) {
+                var txt = new Text(message, size + "pt Verdana");
+                txt.setPosition(x - txt.getWidth() / 2, y + txt.getHeight() / 2);
+                sptexting.push(txt);
+                add(txt);
+            }
+
+            function spselectMode(e) {
+
+
+                if (sprectangles[0].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    setTimer(createCircle, 500);
+                    backButton();
+                } else if (sprectangles[1].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    setTimer(makeSnow, 60);
+                    setTimer(fallSnow, 60);
+                    background();
+                    arms();
+                    lowerBody();
+                    upperBody();
+                    tongue();
+                    head();
+                    eye();
+                    floor();
+                    backButton();
+                } else if (sprectangles[2].containsPoint(e.getX(), e.getY())) {
+
+
+                    removeAll();
+                    stopAllTimers();
+                    var rect56 = new Rectangle(getWidth(), getHeight());
+                    rect56.setPosition(0, 0);
+                    rect56.setColor("Color.black");
+                    add(rect56);
+
+                    displayText();
+                    mouseClickMethod(onClick);
+                    setTimer(animate, 15);
+                    backButton();
+                } else if (sprectangles[3].containsPoint(e.getX(), e.getY())) {
+
+                    removeAll();
+                    stopAllTimers();
+
+                    var back = new Rectangle(getWidth(), getHeight());
+                    back.setPosition(0, 0);
+                    add(back);
+
+                    ballb = new Circle(15);
+                    ballb.setPosition(50, 50);
+                    ballb.setColor(Color.white);
+                    add(ballb);
+                    setTimer(moveballb, 25);
+                    keyDownMethod(update);
+
+                    mouseClickMethod(pause);
+
+
+                    backButton();
+                }
+
+
+            }
+            var back;
+
+
+            function backButton() {
+
+                back = new Rectangle(60, 60);
+                back.setPosition(0, 0);
+                add(back);
+                var lines = new Line(20, 30, 50, 30);
+                lines.setPosition(20, 30);
+                lines.setColor(Color.white);
+                add(lines);
+                var upSlant = new Line(10, 30, 30, 10);
+                upSlant.setPosition(10, 30);
+                upSlant.setColor(Color.white);
+                add(upSlant);
+                var downSlant = new Line(10, 30, 30, 50);
+                downSlant.setPosition(10, 30);
+                downSlant.setColor(Color.white);
+                add(downSlant);
+
+            }
+            function animationback(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    snowHeight = -50;
+                    snowArr.splice(0, snowArr.length);
+                    removeAll();
+                    stopAllTimers();
+                    start();
+
+
+
+                }
+            }
+            function createCircle() {
+                cdMusic.play();
+                backButton();
+                var color = Randomizer.nextColor();
+                for (var i = 0; i < 20; i++) {
+                    var circle = new Circle(Randomizer.nextInt(5, 25));
+                    circle.setColor(color);
+                    circle.setPosition(Randomizer.nextInt(0, getWidth()), Randomizer.nextInt(0, getHeight()));
+                    add(circle);
+                    mouseClickMethod(animationback);
+                }
+            }
+            //Pac snow
+            var BOTTOM_RADIUS = 110;
+            var SIZE = BOTTOM_RADIUS;
+            var MID_RADIUS = 0.6 * BOTTOM_RADIUS;
+            var NOSE_WIDTH = BOTTOM_RADIUS;
+            var NOSE_HEIGHT = 0.1 * BOTTOM_RADIUS;
+            var EYE_RADIUS = 0.04 * BOTTOM_RADIUS;
+            var HEAD_RADIUS = 0.5 * BOTTOM_RADIUS;
+            var HEAD_START = 31.95;
+            var HEAD_END = 324;
+            var EYE_RADIUS = 0.07 * BOTTOM_RADIUS;
+            var ARM_WIDTH = 3.4 * BOTTOM_RADIUS;
+            var ARM_HEIGHT = 0.2 * BOTTOM_RADIUS;
+            var snow;
+            var snowArr = [];
+            var snowHeight = -50;
+            var psrect;
+            var psx = false;
+            var pstext;
+
+            function background() {
+                cdMusic.play();
+                var bg = new Rectangle(getWidth(), getHeight());
+                bg.setPosition(0, 0);
+                bg.setColor("#000080");
+                add(bg);
+                mouseClickMethod(animationback);
+            }
+
+            function arms() {
+                var arms = new Oval(ARM_WIDTH, ARM_HEIGHT);
+                arms.setPosition(getWidth() / 2, getHeight() - 2 * BOTTOM_RADIUS - MID_RADIUS);
+                arms.setColor(Color.yellow);
+                add(arms);
+            }
+            function lowerBody() {
+                var bottomCircle = new Circle(BOTTOM_RADIUS);
+                bottomCircle.setPosition(getWidth() / 2, getHeight() - BOTTOM_RADIUS);
+                bottomCircle.setColor(Color.yellow);
+                add(bottomCircle);
+            }
+            function upperBody() {
+                var middleCircle = new Circle(MID_RADIUS);
+                middleCircle.setPosition(getWidth() / 2, getHeight() - (BOTTOM_RADIUS * 2 + MID_RADIUS));
+                middleCircle.setColor(Color.yellow);
+                add(middleCircle);
+            }
+            function tongue() {
+                var tongue = new Oval(NOSE_WIDTH, NOSE_HEIGHT);
+                tongue.setPosition(getWidth() / 2, getHeight() - BOTTOM_RADIUS * 2.04 - MID_RADIUS * 2.75);
+                tongue.setColor(Color.red);
+                add(tongue);
+            }
+            function head() {
+                var head = new Arc(HEAD_RADIUS, HEAD_START, HEAD_END, 0);
+                head.setPosition(getWidth() / 2, getHeight() - BOTTOM_RADIUS * 2.04 - MID_RADIUS * 2.75);
+                head.setColor(Color.yellow);
+                add(head);
+            }
+            function eye() {
+                var eye = new Circle(EYE_RADIUS);
+                eye.setPosition(getWidth() / 2, getHeight() - BOTTOM_RADIUS * 2.3 - MID_RADIUS * 2.75);
+                add(eye);
+            }
+            function makeSnow() {
+                snow = new Arc(HEAD_RADIUS / 4.3, HEAD_START, HEAD_END, 0);
+                snow.setPosition(Randomizer.nextInt(10, getWidth() - 10), 0);
+                snow.setColor(Color.yellow);
+                add(snow);
+                snow.dy = Randomizer.nextInt(5, 9);
+                snow.dx = Randomizer.nextInt(-3, 3);
+                snowArr.push(snow);
+                add(snow);
+            }
+            function floor() {
+                psrect = new Rectangle(getWidth(), snowHeight);
+                psrect.setPosition(0, getHeight() - psrect.getHeight());
+                psrect.setColor(Color.yellow);
+                add(psrect);
+            }
+            function fallSnow() {
+                for (var i = 0; i < snowArr.length; i++) {
+                    var q = snowArr[i];
+                    q.move(0, 0);
+                    q.move(q.dx, q.dy);
+                }
+                snowHeight++;
+                floor();
+                if (psrect.getY() == 0) {
+                    pstext = new Text("I'm covered in PacSnow!", "19pt Verdana");
+                    pstext.setPosition(getWidth() / 2 - pstext.getWidth() / 2, 250);
+                    add(pstext);
+                    backButton();
+                    stopAllTimers();
+                    mouseClickMethod(animationback);
+                    cdMusic.pause();
+                    snowHeight = -50;
+                    snowArr.splice(0, snowArr.length)
+
+                }
+            }
+
+            //confetti
+            var cfccircArr = [];
+            var cfctxt;
+            var cfcmaxBounces = 20;
+
+            function displayText() {
+                cdMusic.play();
+                cfctxt = new Text("Click For Confetti!", "20pt Verdana");
+                cfctxt.setPosition(cfctxt.getX() + getWidth() / 2 - cfctxt.getWidth() / 2, cfctxt.getHeight());
+                cfctxt.setColor("#9df700");
+                add(cfctxt);
+
+
+            }
+            function onClick(e) {
+                var elem = getElementAt(e.getX(), e.getY());
+
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    removeAll();
+                    stopAllTimers();
+
+                    start();
+                    cfccircArr.splice(0, cfccircArr.length);
+                } else
+                    var numCircles = Randomizer.nextInt(50, 200);
+                for (var i = 0; i < numCircles; i++) {
+                    var circ = new Circle(Randomizer.nextInt(1, 10));
+                    circ.setPosition(e.getX(), e.getY());
+                    circ.setColor(Randomizer.nextColor());
+                    add(circ);
+                    circ.dx = Randomizer.nextFloat(-5, 5);
+                    circ.dy = Randomizer.nextFloat(-10, -1);
+                    circ.ddy = 0.1;
+                    circ.numBounces = 0;
+                    cfccircArr.push(circ);
+                }
+            }
+
+            function animate() {
+                for (var i = cfccircArr.length - 1; i >= 0; i--) {
+                    var c = cfccircArr[i];
+                    c.dy += c.ddy;
+                    c.move(c.dx, c.dy);
+                    if (c.getY() >= getHeight()) {
+                        c.dy = - (c.dy / 2);
+                        c.setPosition(c.getX(), getHeight() - c.getRadius());
+                        c.numBounces++;
+                        if (c.numBounces == cfcmaxBounces) {
+                            remove(c);
+                            cfccircArr.remove(i);
+                        }
+                    }
+                }
+            }
+
+            var ballb;
+            var dxb = 1;
+            var dyb = 1;
+            var pausedb = false;
+
+
+
+            function moveballb() {
+                cdMusic.play();
+                ballb.move(dxb, dyb);
+                if (ballb.getX() + ballb.getRadius() >= getWidth() || ballb.getX() - ballb.getRadius() <= 0) {
+                    dxb = -dxb;
+                } else if (ballb.getY() + ballb.getRadius() >= getHeight() || ballb.getY() - ballb.getRadius() <= 0) {
+                    dyb = -dyb;
+                }
+                if (ballb.getX() == getWidth() && ballb.getY() == 0) {
+                    ballb.setPosition(getWidth() - 1, 1);
+
+                } if (ballb.getX() == getWidth() && ballb.getY() == getHeight()) {
+                    ballb.setPosition(getWidth() - 1, getHeight() - 1);
+
+                } if (ballb.getX() == 0 && ballb.getY() == getHeight()) {
+                    ballb.setPosition(1, getHeight() - 1);
+
+                } if (ballb.getX() == 0 && ballb.getY() == 0) {
+                    ballb.setPosition(1, 1);
+
+                }
+                chooseColor();
+                if (ballb.getX() < 0) {
+                    ballb.setPosition(40, ballb.getY());
+                } else if (ballb.getX() > getWidth()) {
+                    ballb.setPosition(getWidth() - 40, ballb.getY());
+                } else if (ballb.getY() < 0) {
+                    ballb.setPosition(ballb.getX(), 40);
+                } else if (ballb.getX() > getHeight()) {
+                    ballb.setPosition(ballb.getX(), getHeight() - 40);
+                }
+            }
+
+            function chooseColor() {
+                if (ballb.getX() < getWidth() / 2 && ballb.getY() < getHeight() / 2) {
+                    ballb.setColor(Color.red);
+                } else if (ballb.getX() < getWidth() / 2 && ballb.getY() > getHeight() / 2) {
+                    ballb.setColor(Color.green);
+                } else if (ballb.getX() > getWidth() / 2 && ballb.getY() < getHeight() / 2) {
+                    ballb.setColor(Color.cyan);
+                } else {
+                    ballb.setColor(Color.orange);
+                }
+            }
+
+            function pause(e) {
+                if (e.getX() >= 60 || e.getY() > 60) {
+
+                    pausedb = !pausedb;
+                    if (pausedb) {
+
+                        stopTimer(moveballb);
+                    } else {
+
+                        setTimer(moveballb, 10);
+                    }
+                } else {
+
+                    cdMusic.pause();
+                    removeAll();
+                    dxb = 1;
+                    dyb = 1;
+                    stopAllTimers();
+                    start();
+                }
+            }
+
+            function update(e) {
+                if (e.keyCode == Keyboard.UP) {
+                    if (Math.abs(dxb) < 5) {
+                        if (dxb > 0) {
+                            dxb += 0.25;
+                        } else {
+                            dxb -= 0.25;
+                        }
+                        if (dyb > 0) {
+                            dyb += 0.25;
+                        } else {
+                            dyb -= 0.25;
+                        }
+                    }
+                } else if (e.keyCode == Keyboard.DOWN) {
+                    if (Math.abs(dxb) > 1) {
+                        if (dxb > 0) {
+                            dxb -= 0.25;
+                        } else {
+                            dxb += 0.25;
+                        }
+                        if (dyb > 0) {
+                            dyb -= 0.25;
+                        } else {
+                            dyb += 0.25;
+                        }
+                    }
+                } else if (e.keyCode == Keyboard.letter('d')) {
+                    if (ballb.getRadius() < 40) {
+                        ballb.setRadius(ballb.getRadius() + 1);
+                    }
+                } else if (e.keyCode == Keyboard.letter('a')) {
+                    if (ballb.getRadius() > 10) {
+                        ballb.setRadius(ballb.getRadius() - 1);
+                    }
+                }
+            }
+            if (typeof start === 'function') {
+                start();
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
