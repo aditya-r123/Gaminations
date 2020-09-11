@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Input Activities</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript"
+        src="https://static.codehs.com/gulp/d07a4ef9e3f06b69e1b3e361697c7c4216ad6ae0/chs-js-lib/chs.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: inline-block;
+            vertical-align: top;
+            margin-left: 34%;
+        }
+
+        .about {
+            text-align: center;
+            color: #f5cf36;
+        }
+
+        #backButton {
+            position: relative;
+            left: 37%;
+        }
+
+        #backMessage {
+            position: relative;
+            left: 50%;
+            bottom: 60px;
+        }
+
+        #info {
+            text-align: center;
+        }
+
+        .linking {
+            padding: 5px;
+        }
+
+        .linking:hover {
+            background-color: #f5cf36;
+        }
+        body{
+            padding: 10px;
+            font-family: serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="about">User Input Activities</h1><br />
+    <nav>
+        <a href="index.html" id="backButton"><img src="BackButton.png" alt="Image of a backbutton." /></a>
+        <p id="backMessage">Click the back button to return to the home page.</p>
+    </nav>
+    <h3 class="about">Please click the links for instructions on each activity:</h3>
+    <div class="container">
+        <nav>
+            <div class="row">
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(1)" class="linking">Rock Paper Scissors Instructions</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(2)" class="linking">Guess My Number Instructions</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(3)" class="linking">Coin Toss Instructions</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(4)" class="linking">Paint Instructions</a>
+                </div> 
+            </div>
+        </nav>
+    </div>
+    <br />
+    <p id="info">Please select a link for instructions.</p>
+    <script>
+        function updateInfo(num) {
+            switch (num) {
+                case 1:
+                    $("#info").html("Rock Paper Scissors Instructions: Try to beat the computer by clicking rock, paper, or scissors. First to 3 points wins.");
+                    break;
+                case 2:
+                    $("#info").html("Guess My Number Instructions: Try to guess the computer’s number by clicking on the different buttons to increase or decrease your current guess. Once you are satisfied with your number, click “submit” to finalize your guess. Try to guess the number in as few tries as you can.");
+                    break;
+                case 3:
+                    $("#info").html("Coin Toss Instructions: Click on heads or tails and bet against the computer. Winning earns you $10 and losing decreases your money by $10. Last to go bankrupt wins.");
+                    break;
+                case 4:
+                    $("#info").html("Paint Instructions: Choose a color using the palette at the bottom and drag your mouse to draw and erase. Click on the eraser to erase. Use the up and down arrow keys to change the size of your paint brush and eraser. Click the reset button to clear the canvas.");
+                    break;
+                default:
+                    $("#info").html("Please select a link for instructions.");
+            }
+        }
+    </script>
+
+    <canvas width="400" height="500" class="codehs-editor-canvas"></canvas>
+
+    <script>
+        window.onload = function () {
+            var cdMusic = new Audio("https://codehs.com/uploads/c50d940712e47a15c195d74ae508636e");
+            //Selection Screen
+            var sprectangles = [];
+            var sptexting = [];
+            var bg;
+            var gmnnum = Randomizer.nextInt(1, 100);
+            var gmnguess;
+            var gmnresult = "";
+            var gmnscore = 0;
+            var gmnbackdrop = new Rectangle(getWidth(), getHeight());
+
+            var gmntxt = new Text("Your guess is: (make a guess)", "17pt Verdana");
+
+
+            var gmntxt2 = new Text("Your current number is: 1", "15pt Verdana");
+
+            var gmnrect;
+            var gmncounter = 1;
+            var gmncenterTxt;
+
+            var gmnguessrect1;
+            var gmnguessrect2;
+            var gmnguessrect3;
+            var gmnguessrect4;
+            var gmnguessrect5;
+            var gmnguessrect6;
+
+            var gmnText1;
+            var gmnText2;
+            var gmnText3;
+            var gmnText4;
+            var gmnText5;
+            var gmnText6;
+
+            var gmnsubmit;
+            var gmnsubmittxt;
+
+            var projNameTxt;
+
+            function start() {
+
+
+
+
+                bg = new Rectangle(getWidth(), 115);
+                bg.setPosition(0, 0);
+                bg.setColor("#dcd9ff");
+                add(bg);
+
+
+                projNameTxt = new Text("User Input Activities", "27pt Verdana");
+                projNameTxt.setPosition(getWidth() / 2 - projNameTxt.getWidth() / 2, 65);
+                projNameTxt.setColor("#7700b8");
+                add(projNameTxt);
+
+
+
+
+                spmakeRect(0, getHeight() - 2 * getHeight() / 2.5, Color.red);
+                spmakeRect(getWidth() / 2, getHeight() - 2 * getHeight() / 2.5, Color.cyan);
+                spmakeRect(0, getHeight() - getHeight() / 2.5, Color.green);
+                spmakeRect(getWidth() / 2, getHeight() - getHeight() / 2.5, Color.yellow);
+                spmakeText("Rock Paper Scissors", getWidth() / 4, getHeight() / 2.5, 14.5);
+                spmakeText("Guess My Number", getWidth() * 3 / 4, getHeight() / 2.5, 16);
+                spmakeText("Coin Toss", getWidth() / 4, getHeight() * 4 / 5, 20);
+                spmakeText("Paint", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                mouseClickMethod(spselectMode);
+
+            }
+
+
+
+            function spmakeRect(x, y, color) {
+                var rect = new Rectangle(getWidth() / 2, getHeight() / 2.5);
+                rect.setPosition(x, y);
+                rect.setColor(color);
+                sprectangles.push(rect);
+                add(rect);
+            }
+
+            function spmakeText(message, x, y, size) {
+                var txt = new Text(message, size + "pt Verdana");
+                txt.setPosition(x - txt.getWidth() / 2, y + txt.getHeight() / 2);
+                sptexting.push(txt);
+                add(txt);
+            }
+
+            function spselectMode(e) {
+
+
+                if (sprectangles[0].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    rpssetUp();
+                    mouseClickMethod(choose);
+                    backButton();
+                } else if (sprectangles[1].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    cdMusic.play();
+                    stopAllTimers();
+
+                    gmnbackdrop.setPosition(0, 0);
+                    gmnbackdrop.setColor("#d393fa");
+                    add(gmnbackdrop);
+
+
+                    gmnrect = new Rectangle(getWidth(), getHeight() * 3 / 5);
+                    gmnrect.setPosition(0, getHeight() / 5);
+                    gmnrect.setColor("#fcba03");
+                    add(gmnrect);
+
+                    gmntxt.setPosition(getWidth() / 2 - gmntxt.getWidth() / 2, getHeight() * 9 / 10 + gmntxt.getHeight() / 2);
+                    gmntxt.setColor("#0a0505");
+                    add(gmntxt);
+                    gmntxt2.setPosition(getWidth() / 2 - gmntxt2.getWidth() / 2 + gmntxt.getWidth() / 13, getHeight() / 10 + gmntxt2.getHeight() / 2);
+                    gmntxt2.setColor("#0a0505");
+                    add(gmntxt2);
+
+
+                    gmnguessrect1 = new Rectangle(gmnrect.getWidth() / 3, gmnrect.getHeight() / 2);
+                    gmnguessrect1.setPosition(0, getHeight() / 5);
+                    gmnguessrect1.setColor("#26cf00");
+                    add(gmnguessrect1);
+
+                    gmnText1 = new Text("+1", "40pt Verdana");
+                    gmnText1.setPosition((gmnguessrect1.getX() + (gmnguessrect1.getWidth() / 2)) - gmnText1.getWidth() / 2, (gmnguessrect1.getY() + gmnguessrect1.getHeight() / 2 + 25));
+                    gmnText1.setColor(Color.WHITE);
+                    add(gmnText1);
+
+                    gmnguessrect2 = new Rectangle(gmnrect.getWidth() / 3, gmnrect.getHeight() / 2);
+                    gmnguessrect2.setPosition(gmnguessrect1.getWidth(), getHeight() / 5);
+                    gmnguessrect2.setColor("#fabe0a");
+                    add(gmnguessrect2);
+
+                    gmnText2 = new Text("+5", "40pt Verdana");
+                    gmnText2.setPosition((gmnguessrect2.getX() + (gmnguessrect1.getWidth() / 2)) - gmnText2.getWidth() / 2, (gmnguessrect2.getY() + gmnguessrect2.getHeight() / 2 + 25));
+                    gmnText2.setColor(Color.WHITE);
+                    add(gmnText2);
+
+                    gmnguessrect3 = new Rectangle(gmnrect.getWidth() / 3, gmnrect.getHeight() / 2);
+                    gmnguessrect3.setPosition(gmnguessrect1.getWidth() * 2, getHeight() / 5);
+                    gmnguessrect3.setColor("#428eff");
+                    add(gmnguessrect3);
+
+                    gmnText3 = new Text("+10", "40pt Verdana");
+                    gmnText3.setPosition((gmnguessrect3.getX() + (gmnguessrect3.getWidth() / 2)) - gmnText3.getWidth() / 2, (gmnguessrect3.getY() + gmnguessrect3.getHeight() / 2 + 25));
+                    gmnText3.setColor(Color.WHITE);
+                    add(gmnText3);
+
+                    gmnguessrect4 = new Rectangle(gmnrect.getWidth() / 3, gmnrect.getHeight() / 2);
+                    gmnguessrect4.setPosition(0, gmnguessrect1.getY() + gmnguessrect1.getHeight());
+                    gmnguessrect4.setColor("#4fad39");
+                    add(gmnguessrect4);
+
+                    gmnText4 = new Text("-1", "40pt Verdana");
+                    gmnText4.setPosition((gmnguessrect4.getX() + (gmnguessrect4.getWidth() / 2)) - gmnText4.getWidth() / 2, (gmnguessrect4.getY() + gmnguessrect4.getHeight() / 2 + 25));
+                    gmnText4.setColor(Color.WHITE);
+                    add(gmnText4);
+
+                    gmnguessrect5 = new Rectangle(gmnrect.getWidth() / 3, gmnrect.getHeight() / 2);
+                    gmnguessrect5.setPosition(gmnguessrect4.getWidth(), gmnguessrect1.getY() + gmnguessrect1.getHeight());
+                    gmnguessrect5.setColor("#cfa425");
+                    add(gmnguessrect5);
+
+                    gmnText5 = new Text("-5", "40pt Verdana");
+                    gmnText5.setPosition((gmnguessrect5.getX() + (gmnguessrect5.getWidth() / 2)) - gmnText5.getWidth() / 2, (gmnguessrect5.getY() + gmnguessrect5.getHeight() / 2 + 25));
+                    gmnText5.setColor(Color.WHITE);
+                    add(gmnText5);
+
+                    gmnguessrect6 = new Rectangle(gmnrect.getWidth() / 3, gmnrect.getHeight() / 2);
+                    gmnguessrect6.setPosition(gmnguessrect4.getWidth() * 2, gmnguessrect1.getY() + gmnguessrect1.getHeight());
+                    gmnguessrect6.setColor("#2f5a9c");
+                    add(gmnguessrect6);
+
+                    gmnText6 = new Text("-10", "40pt Verdana");
+                    gmnText6.setPosition((gmnguessrect6.getX() + (gmnguessrect6.getWidth() / 2)) - gmnText6.getWidth() / 2, (gmnguessrect6.getY() + gmnguessrect6.getHeight() / 2 + 25));
+                    gmnText6.setColor(Color.WHITE);
+                    add(gmnText6);
+
+                    gmnsubmit = new Rectangle(getWidth(), getHeight() / 3);
+                    gmnsubmit.setPosition(0, gmnguessrect4.getY() + gmnguessrect4.getHeight());
+                    gmnsubmit.setColor(Color.BLACK);
+                    add(gmnsubmit);
+
+                    gmnsubmittxt = new Text("Submit", "40pt Arial");
+                    gmnsubmittxt.setPosition((getWidth() / 2) - 70, (gmnsubmit.getY() + gmnsubmit.getHeight() / 2) - 20);
+                    gmnsubmittxt.setColor(Color.WHITE);
+                    add(gmnsubmittxt);
+
+                    mouseClickMethod(gmntrying);
+
+
+                    backButton();
+                } else if (sprectangles[2].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    ctSetUp();
+                    backButton();
+                } else if (sprectangles[3].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    makeTaskbar();
+                    resetPaint();
+                    makeCircles();
+                    mouseDragMethod(paint);
+                    keyDownMethod(keyboard);
+                    mouseClickMethod(changeColorAndErase);
+
+
+                    backButton();
+                }
+
+
+            }
+            var back;
+
+
+            function backButton() {
+
+                back = new Rectangle(60, 60);
+                back.setPosition(0, 0);
+                add(back);
+                var lines = new Line(20, 30, 50, 30);
+                lines.setPosition(20, 30);
+                lines.setColor(Color.white);
+                add(lines);
+                var upSlant = new Line(10, 30, 30, 10);
+                upSlant.setPosition(10, 30);
+                upSlant.setColor(Color.white);
+                add(upSlant);
+                var downSlant = new Line(10, 30, 30, 50);
+                downSlant.setPosition(10, 30);
+                downSlant.setColor(Color.white);
+                add(downSlant);
+
+            }
+
+            var rpsrectangles = [];
+            var rpsTexts = [];
+            var rpsplayerOption = "null";
+            var rpsCPUOption = "null";
+            var rpsoneTime = true;
+            var rpsplayertxt;
+            var rpspscore = 0;
+            var rpscpuscore = 0;
+            var rpsgameOver = false;
+
+
+            function rpssetUp() {
+                cdMusic.play();
+                rpsmakeRect(getHeight() / 5 + 12.4, 192, Color.grey);
+                rpsmakeText("Rock", getHeight() * 4.73 / 10);
+                rpsmakeRect(getHeight() / 5 + 12.4, 288, Color.yellow);
+                rpsmakeText("Paper", getHeight() * 6.65 / 10);
+                rpsmakeRect(getHeight() / 4.9 + 12.4, 384, Color.green);
+                rpsmakeText("Scissors", getHeight() * 9 / 10);
+                rpsmakeText("", getHeight() * 1 / 10);
+                rpsmakeText("Choose an option:", getHeight() * 2 / 10);
+                rpsmakeText("", getHeight() * 2 / 10);
+                rpsoneTime = true;
+            }
+
+            function choose(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    removeAll();
+                    stopAllTimers();
+                    rpsplayerOption = "null";
+                    rpsCPUOption = "null";
+                    rpspscore = 0;
+                    rpscpuscore = 0;
+                    rpsgameOver = false;
+                    rpsrectangles.splice(0, rpsrectangles.length);
+                    rpsTexts.splice(0, rpsTexts.length);
+
+                    start();
+
+
+                } else {
+                    var elem = getElementAt(e.getX(), e.getY());
+                    if (elem != null && !rpsgameOver && elem.getColor() != "#a1fa93" && elem.getColor() != "#fc8d8d") {
+                        if (rpsoneTime) {
+                            if (e.getY() > 192 && e.getY() <= 288) {
+                                rpsplayerOption = 1;
+                            } else if (e.getY() >= 290 && e.getY() <= 384) {
+                                rpsplayerOption = 2;
+                            } else if (e.getY() > 385) {
+                                rpsplayerOption = 3;
+                            }
+                            rpsCPUOption = Randomizer.nextInt(1, 3);
+                            winOrLose();
+                        } else {
+                            if (rpsrectangles[0].containsPoint(e.getX(), e.getY())) {
+                                while (rpsTexts.length > 0) {
+                                    remove(rpsTexts[rpsTexts.length - 1]);
+                                    rpsTexts.pop();
+                                }
+                                while (rpsrectangles.length > 0) {
+                                    remove(rpsrectangles[rpsrectangles.length - 1]);
+                                    rpsrectangles.pop();
+                                }
+                                rpssetUp();
+                            }
+                        }
+                    }
+                }
+            }
+
+            function winOrLose() {
+
+                if (rpsoneTime) {
+                    if (rpsCPUOption == 1) {
+                        rpsTexts[3].setText("CPU chose: Rock");
+                        rpsTexts[3].setPosition(getWidth() / 2 - rpsTexts[3].getWidth() / 2, getHeight() * 1 / 10 + rpsTexts[3].getHeight() / 2);
+                        if (rpsplayerOption == 1) {
+                            rpsTexts[4].setText("Result: Tie");
+                        } else if (rpsplayerOption == 2) {
+                            rpsTexts[4].setText("Result: Win");
+                            rpspscore++;
+                        } else if (rpsplayerOption == 3) {
+                            rpsTexts[4].setText("Result: Lose");
+                            rpscpuscore++;
+                        }
+                    } else if (rpsCPUOption == 2) {
+                        rpsTexts[3].setText("CPU choose: Paper");
+                        rpsTexts[3].setPosition(getWidth() / 2 - rpsTexts[3].getWidth() / 2, getHeight() * 1 / 10 + rpsTexts[3].getHeight() / 2);
+                        if (rpsplayerOption == 1) {
+                            rpsTexts[4].setText("Result: Lose");
+                            rpscpuscore++;
+                        } else if (rpsplayerOption == 2) {
+                            rpsTexts[4].setText("Result: Tie");
+                        } else if (rpsplayerOption == 3) {
+                            rpsTexts[4].setText("Result: Win");
+                            rpspscore++;
+                        }
+                    } else if (rpsCPUOption == 3) {
+                        rpsTexts[3].setText("CPU choose: Scissors");
+                        rpsTexts[3].setPosition(getWidth() / 2 - rpsTexts[3].getWidth() / 2, getHeight() * 1 / 10 + rpsTexts[3].getHeight() / 2);
+                        if (rpsplayerOption == 1) {
+                            rpsTexts[4].setText("Result: Win");
+                            rpspscore++;
+                        } else if (rpsplayerOption == 2) {
+                            rpsTexts[4].setText("Result: Lose");
+                            rpscpuscore++;
+                        } else if (rpsplayerOption == 3) {
+                            rpsTexts[4].setText("Result: Tie");
+                        }
+                    }
+                    rpsTexts[4].setPosition(getWidth() / 2 - rpsTexts[4].getWidth() / 2, getHeight() * 3 / 10 + rpsTexts[4].getHeight() / 2);
+                    rpsoneTime = false;
+                    if (rpsplayerOption == 1) {
+                        rpsTexts[5].setText("Player chose: Rock");
+                    } else if (rpsplayerOption == 2) {
+                        rpsTexts[5].setText("Player chose: Paper");
+                    } else if (rpsplayerOption == 3) {
+                        rpsTexts[5].setText("Player chose: Scissors");
+                    }
+                    rpsTexts[5].setPosition(getWidth() / 2 - rpsTexts[5].getWidth() / 2, getHeight() * 2 / 10 + rpsTexts[5].getHeight() / 2);
+                    if (rpspscore == 3) {
+                        gameEnd("Player");
+                    } else if (rpscpuscore == 3) {
+                        gameEnd("CPU");
+                    } else {
+                        reset();
+                        nextTime();
+                    }
+                }
+            }
+
+            function nextTime() {
+                while (rpsrectangles.length > 0) {
+                    remove(rpsrectangles[rpsrectangles.length - 1]);
+                    rpsrectangles.pop();
+                }
+                rpsmakeRect(getHeight() * 3.1 / 5, getHeight() * 1.9 / 5, Color.orange);
+                rpsmakeText("Next Round", getHeight() * 7 / 10);
+            }
+
+            function rpsmakeRect(height, y, color) {
+
+                var rect = new Rectangle(getWidth(), height);
+                rect.setPosition(0, y);
+                rect.setColor(color);
+                rpsrectangles.push(rect);
+                add(rect);
+            }
+
+            function rpsmakeText(message, y) {
+
+                var txt = new Text(message, "20pt Arial");
+                txt.setPosition(getWidth() / 2 - txt.getWidth() / 2, y + txt.getHeight() / 2);
+                rpsTexts.push(txt);
+                add(txt);
+            }
+
+            function reset() {
+                while (rpsrectangles.length > 0) {
+                    rpsrectangles.pop();
+                }
+                rpsplayerOption = "null";
+                rpsCPUOption = "null";
+            }
+
+            function gameEnd(winner) {
+                rpsgameOver = true;
+                removeAll();
+                stopAllTimers();
+                rpsoneTime = false;
+                while (rpsTexts.length > 0) {
+                    rpsTexts.pop();
+                }
+                while (rpsrectangles.length > 0) {
+                    remove(rpsrectangles[rpsrectangles.length - 1]);
+                    rpsrectangles.pop();
+                }
+                if (winner == "Player") {
+                    rpsmakeRect(getHeight(), 0, "#a1fa93");
+                } else {
+                    rpsmakeRect(getHeight(), 0, "#fc8d8d");
+                }
+                rpsmakeText(winner + " Wins!", getHeight() / 4);
+                rpsmakeText("Score: " + rpspscore + " - " + rpscpuscore, getHeight() * 3 / 4);
+                backButton();
+                mouseClickMethod(rpsback);
+                rpsplayerOption = "null";
+                rpsCPUOption = "null";
+                rpspscore = 0;
+                rpscpuscore = 0;
+                rpsgameOver = false;
+
+
+
+            }
+
+            function rpsback(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    rpsplayerOption = "null";
+                    rpsCPUOption = "null";
+                    rpspscore = 0;
+                    rpscpuscore = 0;
+                    rpsgameOver = false;
+                    removeAll();
+                    stopAllTimers();
+                    start();
+
+
+                }
+            }
+
+            function tooHorL(number) {
+                if (number >= 1 && number <= 100) {
+                    if (number > gmnnum) {
+                        return "too high";
+                    } else if (number < gmnnum) {
+                        return "too low";
+                    } else {
+                        return "guessed";
+                    }
+                }
+            }
+
+            function gmntrying(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    removeAll();
+                    stopAllTimers();
+                    gmnresult = "";
+                    gmnscore = 0;
+                    gmncounter = 1;
+                    start();
+                } else {
+                    if (gmnguessrect1.containsPoint(e.getX(), e.getY())) {
+                        gmnscore += 1;
+                    } else if (gmnguessrect2.containsPoint(e.getX(), e.getY())) {
+                        gmnscore += 5;
+                    } else if (gmnguessrect3.containsPoint(e.getX(), e.getY())) {
+                        gmnscore += 10;
+                    } else if (gmnguessrect4.containsPoint(e.getX(), e.getY())) {
+                        gmnscore -= 1;
+                    } else if (gmnguessrect5.containsPoint(e.getX(), e.getY())) {
+                        gmnscore -= 5;
+                    } else if (gmnguessrect6.containsPoint(e.getX(), e.getY())) {
+                        gmnscore -= 10;
+                    }
+                }
+                if (gmnscore > 100) {
+                    gmnscore = 100;
+                } else if (gmnscore < 1) {
+                    gmnscore = 1;
+                }
+
+                gmntxt2.setText("Your current number is: " + gmnscore);
+
+                if (gmnresult != "guessed" && gmnsubmit.containsPoint(e.getX(), e.getY())) {
+                    gmnguess = gmnscore;
+                    gmnresult = tooHorL(gmnguess);
+                    gmndisplay();
+                    gmncounter++;
+                }
+            }
+
+            function gmndisplay() {
+                gmntxt.setText("Your guess was: " + gmnguess);
+                gmntxt.setPosition(getWidth() / 2 - gmntxt.getWidth() / 2, getHeight() * 9 / 10 + gmntxt.getHeight() / 2);
+                if (gmnresult == "guessed") {
+                    gmntxt2.setText("Congrats! You guessed it!");
+                    cdMusic.pause();
+                    gmnattdisplay(gmncounter);
+                } else {
+                    gmntxt2.setText("Your guess " + "(" + gmnguess + ")" + " was: " + gmnresult);
+                }
+                gmntxt2.setPosition(getWidth() / 2 - gmntxt2.getWidth() / 2 + gmntxt.getWidth() / 13, getHeight() / 10 + gmntxt2.getHeight() / 2);
+            }
+
+            function gmnattdisplay(attempts) {
+                var countertxt = new Text("You took " + attempts + " attempts!", "17pt Verdana");
+                countertxt.setPosition(gmntxt.getX(), gmntxt.getY());
+                countertxt.setColor(Color.BLACK);
+                remove(gmnsubmit);
+                remove(gmnsubmittxt);
+                remove(gmncenterTxt);
+                remove(gmntxt);
+                add(countertxt);
+            }
+
+
+            var ctrects = [];
+            var cttxt = [];
+            var ctChoice = "";
+            var ctCircle;
+            var ctPlayerPoint = 50;
+            var ctCPUPoint = 50;
+            var ctmessages = "";
+            var ctfirstTime = true;
+
+            function xyzempty(e) {
+
+            }
+
+            function ctSetUp() {
+                cdMusic.play();
+                ctmakeRect(getWidth() / 2, getHeight() / 3, 0, getHeight() * 2 / 3, Color.green);
+                ctmakeText("Heads", getWidth() / 4, getHeight() * 5 / 6, 20);
+                ctmakeRect(getWidth() / 2, getHeight() / 3, getWidth() / 2, getHeight() * 2 / 3, Color.red);
+                ctmakeText("Tails", getWidth() * 3 / 4, getHeight() * 5 / 6, 20);
+                ctCircle = new Circle(75);
+                ctCircle.setPosition(getWidth() / 2, getHeight() / 3);
+                ctCircle.setColor(Color.orange);
+                add(ctCircle);
+                ctmakeText("CPU: " + ctCPUPoint, getWidth() / 5, 70, 20);
+                ctmakeText("Player: " + ctPlayerPoint, getWidth() * 4 / 5, 70, 20);
+                ctmakeText("?", getWidth() / 2, getHeight() / 3 - 5, 30);
+                mouseClickMethod(ctChooseMode);
+            }
+
+            function ctmakeRect(width, height, x, y, color) {
+                var rect = new Rectangle(width, height);
+                rect.setPosition(x, y);
+                rect.setColor(color);
+                ctrects.push(rect);
+                add(rect);
+            }
+
+            function ctmakeText(message, x, y, size) {
+                var txt = new Text(message, size + "pt Verdana");
+                txt.setPosition(x - txt.getWidth() / 2, y + txt.getHeight() / 2);
+                cttxt.push(txt);
+                add(txt);
+            }
+
+            function ctChooseMode(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    removeAll();
+                    stopAllTimers();
+                    ctrects.splice(0, ctrects.length);
+                    cttxt.splice(0, cttxt.length);
+
+                    ctChoice = "";
+                    ctCircle;
+                    ctPlayerPoint = 50;
+                    ctCPUPoint = 50;
+                    ctmessages = "";
+                    ctfirstTime = true;
+                    start();
+                } else {
+                    if (ctrects[0].containsPoint(e.getX(), e.getY())) {
+                        ctChoice = "heads";
+                        CPUFlip();
+                    } else if (ctrects[1].containsPoint(e.getX(), e.getY())) {
+                        ctChoice = "tails";
+                        CPUFlip();
+                    }
+                }
+            }
+
+            function CPUFlip() {
+                var flip = Randomizer.nextInt(1, 4);
+                if (flip == 1 || flip == 2) {
+                    ctmessages = "H";
+                } else {
+                    ctmessages = "T";
+                }
+                cttxt[4].setText(ctmessages);
+                ctWinners();
+            }
+
+            function ctWinners(playerC, CPUC) {
+                if (ctChoice == "tails" && ctmessages == "H" || ctChoice == "heads" && ctmessages == "T") {
+                    ctPlayerPoint -= 10;
+                    ctCPUPoint += 10;
+                    if (ctfirstTime) {
+                        ctmakeText("CPU wins this round!", getWidth() / 2, getHeight() / 2 + 20, 20);
+                        ctfirstTime = false;
+                    } else {
+                        cttxt[5].setText("CPU wins this round!");
+
+                    }
+                } else {
+                    ctPlayerPoint += 10;
+                    ctCPUPoint -= 10;
+                    if (ctfirstTime) {
+                        ctmakeText("You win this round!", getWidth() / 2, getHeight() / 2 + 20, 20);
+                        ctfirstTime = false;
+                    } else {
+                        cttxt[5].setText("You win this round!");
+                    }
+                }
+                if (ctPlayerPoint <= 0) {
+                    removeAll();
+                    stopAllTimers();
+                    ctmakeRect(getWidth(), getHeight(), 0, 0, Color.red);
+                    ctmakeText("CPU wins!", getWidth() / 2, getHeight() / 2, 20);
+                    backButton();
+                    cdMusic.pause();
+                } else if (ctCPUPoint <= 0) {
+                    removeAll();
+                    stopAllTimers();
+                    ctmakeRect(getWidth(), getHeight(), 0, 0, Color.green);
+                    ctmakeText("You win!", getWidth() / 2, getHeight() / 2, 20);
+                    backButton();
+                    cdMusic.pause();
+                } else {
+                    cttxt[2].setText("CPU: " + ctCPUPoint);
+                    cttxt[3].setText("Player: " + ctPlayerPoint);
+                }
+            }
+
+
+
+            var taskbar;
+            var red;
+            var orange;
+            var yellow;
+            var green;
+            var blue;
+            var purple;
+            var circle;
+            var rad = 15;
+            var brownColor = new Color(105, 74, 49);
+            var grayColor = new Color(153, 153, 153);
+            var eraserPink = new Color(255, 181, 228);
+            var brown;
+            var gray;
+            var random;
+            var black;
+            var eraser;
+            var paintcolor = Color.black;
+            var resetButton;
+            var resetTxt;
+
+
+            function paint(e) {
+                circle = new Circle(rad);
+                circle.setPosition(e.getX(), e.getY());
+                circle.setColor(paintcolor);
+                if (e.getY() < getHeight() - 50 - rad) {
+                    add(circle);
+                }
+                backButton();
+            }
+
+            function keyboard(e) {
+                if (e.keyCode == Keyboard.UP) {
+                    rad++;
+                } else if (e.keyCode == Keyboard.DOWN) {
+                    rad--;
+                }
+            }
+            function resetPaint() {
+                resetButton = new Rectangle(60, 60);
+                resetButton.setPosition(getWidth() - 60, 0);
+                resetButton.setColor(Color.green);
+                add(resetButton);
+
+                resetTxt = new Text("Reset", "15pt Verdana");
+                resetTxt.setPosition(getWidth() - 57, 35);
+                add(resetTxt);
+
+            }
+
+            function makeTaskbar() {
+                cdMusic.play();
+                taskbar = new Rectangle(getWidth(), 50);
+                taskbar.setPosition(0, getHeight() - 50);
+                taskbar.setColor("#d2f7f5");
+                add(taskbar);
+            }
+
+            function makeCircles() {
+                red = new Circle(15);
+                red.setPosition(20, getHeight() - 25);
+                red.setColor(Color.red);
+                add(red);
+
+
+                orange = new Circle(15);
+                orange.setPosition(50, getHeight() - 25);
+                orange.setColor(Color.orange);
+                add(orange);
+
+
+                yellow = new Circle(15);
+                yellow.setPosition(80, getHeight() - 25);
+                yellow.setColor(Color.yellow);
+                add(yellow);
+
+
+                green = new Circle(15);
+                green.setPosition(110, getHeight() - 25);
+                green.setColor(Color.green);
+                add(green);
+
+
+                blue = new Circle(15);
+                blue.setPosition(140, getHeight() - 25);
+                blue.setColor(Color.blue);
+                add(blue);
+
+                purple = new Circle(15);
+                purple.setPosition(170, getHeight() - 25);
+                purple.setColor(Color.purple);
+                add(purple);
+
+
+                brown = new Circle(15);
+                brown.setPosition(200, getHeight() - 25);
+                brown.setColor(brownColor);
+                add(brown);
+
+
+                gray = new Circle(15);
+                gray.setPosition(230, getHeight() - 25);
+                gray.setColor(grayColor);
+                add(gray);
+
+                random = new Circle(15);
+                random.setPosition(260, getHeight() - 25);
+                random.setColor(Randomizer.nextColor());
+                add(random);
+
+                black = new Circle(15);
+                black.setPosition(290, getHeight() - 25);
+                black.setColor(Color.black);
+                add(black);
+
+                eraser = new Rectangle(45, 25);
+                eraser.setPosition(340, getHeight() - 36);
+                eraser.setColor(eraserPink);
+                add(eraser);
+
+
+            }
+
+            function changeColorAndErase(e) {
+                var elem = getElementAt(e.getX(), e.getY());
+                if (elem != null && elem != taskbar && elem != eraser && elem.getY() > taskbar.getY()) {
+                    paintcolor = elem.getColor();
+                } else if (elem != null && elem != taskbar && elem == eraser) {
+                    paintcolor = Color.white;
+                }
+
+                if (e.getX() < 60 && e.getY() < 60) {
+                    removeAll();
+                    stopAllTimers();
+                    rad = 15;
+                    mouseDragMethod(xyzempty);
+                    start();
+                    cdMusic.pause();
+
+                }
+
+                if (e.getX() > getWidth() - 60 && e.getY() < 60) {
+                    removeAll();
+                    makeTaskbar();
+                    resetPaint();
+                    makeCircles();
+                    mouseDragMethod(paint);
+                    backButton();
+                    keyDownMethod(keyboard);
+                    mouseClickMethod(changeColorAndErase);
+
+
+                }
+            }
+            if (typeof start === 'function') {
+                start();
+            }
+        }
+    </script>
+
+</body>
+
+</html>
