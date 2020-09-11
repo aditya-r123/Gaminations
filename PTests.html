@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Personality Tests</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript"
+        src="https://static.codehs.com/gulp/d07a4ef9e3f06b69e1b3e361697c7c4216ad6ae0/chs-js-lib/chs.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: inline-block;
+            vertical-align: top;
+            margin-left: 34%;
+        }
+
+        .about {
+            text-align: center;
+            color: green;
+        }
+
+        #backButton {
+            position: relative;
+            left: 37%;
+        }
+
+        #backMessage {
+            position: relative;
+            left: 50%;
+            bottom: 60px;
+        }
+
+        #info {
+            text-align: center;
+        }
+
+        .linking {
+            padding: 5px;
+        }
+
+        .linking:hover {
+            background-color: green;
+        }
+        body{
+            padding: 10px;
+            font-family: serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="about">Personality Tests</h1><br />
+    <nav>
+        <a href="index.html" id="backButton"><img src="BackButton.png" alt="Image of a backbutton." /></a>
+        <p id="backMessage">Click the back button to return to the home page.</p>
+    </nav>
+    <h3 class="about">Please click the links for instructions on each activity:</h3>
+    <div class="container">
+        <nav>
+            <div class="row">
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(1)" class="linking">Superhero Instructions</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(2)" class="linking">Animal Instructions</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(3)" class="linking">Color Instructions</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(4)" class="linking">Career Instructions</a>
+                </div> 
+            </div>
+        </nav>
+    </div>
+    <br />
+    <p id="info">Please select a link for instructions.</p>
+    <script>
+        function updateInfo(num) {
+            switch (num) {
+                case 1:
+                    $("#info").html("Superhero Instructions: Click on one of the options that you feel best relates you to the question. Be honest and your fate will be revealed at the end...");
+                    break;
+                case 2:
+                    $("#info").html("Animal Instructions: Click on one of the options that you feel best relates you to the question. Be honest and your fate will be revealed at the end...");
+                    break;
+                case 3:
+                    $("#info").html("Color Instructions: Click on one of the options that you feel best relates you to the question. Be honest and your fate will be revealed at the end...");
+                    break;
+                case 4:
+                    $("#info").html("Career Instructions: Click on one of the options that you feel best relates you to the question. Be honest and your fate will be revealed at the end...");
+                    break;
+                default:
+                    $("#info").html("Please select a link for instructions.");
+            }
+        }
+    </script>
+
+    <canvas width="400" height="500" class="codehs-editor-canvas"></canvas>
+
+    <script>
+        window.onload = function () {
+            //Selection Screen
+            var cdMusic = new Audio("https://codehs.com/uploads/8d6613facc38750bcde83641ccde9ddb");
+            var sprectangles = [];
+            var sptexting = [];
+            var bg;
+            var projNameTxt;
+
+            function start() {
+
+                bg = new Rectangle(getWidth(), 115);
+                bg.setPosition(0, 0);
+                bg.setColor("#dcd9ff");
+                add(bg);
+
+
+                projNameTxt = new Text("Personality Tests", "30pt Verdana");
+                projNameTxt.setPosition(getWidth() / 2 - projNameTxt.getWidth() / 2, 65);
+                projNameTxt.setColor("#7700b8");
+                add(projNameTxt);
+
+
+
+
+                spmakeRect(0, getHeight() - 2 * getHeight() / 2.5, Color.red);
+                spmakeRect(getWidth() / 2, getHeight() - 2 * getHeight() / 2.5, Color.cyan);
+                spmakeRect(0, getHeight() - getHeight() / 2.5, Color.green);
+                spmakeRect(getWidth() / 2, getHeight() - getHeight() / 2.5, Color.yellow);
+                spmakeText("Superhero", getWidth() / 4, getHeight() / 2.5, 20);
+                spmakeText("Career", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                spmakeText("Color", getWidth() / 4, getHeight() * 4 / 5, 20);
+                spmakeText("Animal", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                mouseClickMethod(spselectMode);
+
+            }
+
+
+
+            function spmakeRect(x, y, color) {
+                var rect = new Rectangle(getWidth() / 2, getHeight() / 2.5);
+                rect.setPosition(x, y);
+                rect.setColor(color);
+                sprectangles.push(rect);
+                add(rect);
+            }
+
+            function spmakeText(message, x, y, size) {
+                var txt = new Text(message, size + "pt Verdana");
+                txt.setPosition(x - txt.getWidth() / 2, y + txt.getHeight() / 2);
+                sptexting.push(txt);
+                add(txt);
+            }
+
+            function spselectMode(e) {
+
+
+                if (sprectangles[0].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    sppmakeRect(0, getHeight() - 2 * getHeight() / 2.5, Color.red);
+                    sppmakeRect(getWidth() / 2, getHeight() - 2 * getHeight() / 2.5, Color.cyan);
+                    sppmakeRect(0, getHeight() - getHeight() / 2.5, Color.green);
+                    sppmakeRect(getWidth() / 2, getHeight() - getHeight() / 2.5, Color.yellow);
+                    sppmakeText("Too proud", getWidth() / 4, getHeight() / 2.5, 20);
+                    sppmakeText("Too stubborn", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                    sppmakeText("Too sensitive", getWidth() / 4, getHeight() * 4 / 5, 20);
+                    sppmakeText("Too crazy", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                    sppmakeText("Your greatest weakness is...", getWidth() * 2.85 / 5, 50, 17);
+
+                    mouseClickMethod(sppselectMode);
+
+                    backButton();
+                } else if (sprectangles[1].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    cptmakeRect(0, getHeight() - 2 * getHeight() / 2.5, Color.red);
+                    cptmakeRect(getWidth() / 2, getHeight() - 2 * getHeight() / 2.5, Color.cyan);
+                    cptmakeRect(0, getHeight() - getHeight() / 2.5, Color.green);
+                    cptmakeRect(getWidth() / 2, getHeight() - getHeight() / 2.5, Color.yellow);
+                    cptmakeText("Very dumb", getWidth() / 4, getHeight() / 2.5, 20);
+                    cptmakeText("Dumb", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                    cptmakeText("Smart", getWidth() / 4, getHeight() * 4 / 5, 20);
+                    cptmakeText("Very smart", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                    cptmakeText("How smart are you?", getWidth() * 2.85 / 5, 50, 18);
+                    backButton();
+                    mouseClickMethod(cptselectMode);
+
+                } else if (sprectangles[2].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    coptmakeRect(0, getHeight() - 2 * getHeight() / 2.5, Color.red);
+                    coptmakeRect(getWidth() / 2, getHeight() - 2 * getHeight() / 2.5, Color.cyan);
+                    coptmakeRect(0, getHeight() - getHeight() / 2.5, Color.green);
+                    coptmakeRect(getWidth() / 2, getHeight() - getHeight() / 2.5, Color.yellow);
+                    coptmakeText("Love", getWidth() / 4, getHeight() / 2.5, 20);
+                    coptmakeText("Nature", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                    coptmakeText("People", getWidth() / 4, getHeight() * 4 / 5, 20);
+                    coptmakeText("Challenges", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                    coptmakeText("What do you appreciate the most?", getWidth() * 2.85 / 5, 50, 14);
+                    mouseClickMethod(coptselectMode);
+
+                    backButton();
+                    mouseClickMethod(coptselectMode);
+
+                    backButton();
+                } else if (sprectangles[3].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    aptmakeRect(0, getHeight() - 2 * getHeight() / 2.5, Color.red);
+                    aptmakeRect(getWidth() / 2, getHeight() - 2 * getHeight() / 2.5, Color.cyan);
+                    aptmakeRect(0, getHeight() - getHeight() / 2.5, Color.green);
+                    aptmakeRect(getWidth() / 2, getHeight() - getHeight() / 2.5, Color.yellow);
+                    aptmakeText("Yellow", getWidth() / 4, getHeight() / 2.5, 20);
+                    aptmakeText("Red", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                    aptmakeText("Green", getWidth() / 4, getHeight() * 4 / 5, 20);
+                    aptmakeText("White", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                    aptmakeText("What is your favorite color?", getWidth() * 2.85 / 5, 50, 18);
+
+                    mouseClickMethod(aptselectMode);
+
+
+                    backButton();
+                }
+
+
+            }
+            var back;
+
+
+            function backButton() {
+
+                back = new Rectangle(60, 60);
+                back.setPosition(0, 0);
+                add(back);
+                var lines = new Line(20, 30, 50, 30);
+                lines.setPosition(20, 30);
+                lines.setColor(Color.white);
+                add(lines);
+                var upSlant = new Line(10, 30, 30, 10);
+                upSlant.setPosition(10, 30);
+                upSlant.setColor(Color.white);
+                add(upSlant);
+                var downSlant = new Line(10, 30, 30, 50);
+                downSlant.setPosition(10, 30);
+                downSlant.setColor(Color.white);
+                add(downSlant);
+
+            }
+            function animationback(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    snowHeight = 0;
+                    snowArr.splice(0, snowArr.length);
+                    removeAll();
+                    stopAllTimers();
+                    start();
+                    //cdMusic.pause();
+
+                }
+            }
+            var sprectangles = [];
+            var sptexting = [];
+
+            var sptotalScore = 0;
+            var spptCurScreen = 0;
+
+
+
+            function sppmakeRect(x, y, color) {
+                cdMusic.play();
+                var rect = new Rectangle(getWidth() / 2, getHeight() / 2.5);
+                rect.setPosition(x, y);
+                rect.setColor(color);
+                add(rect);
+                sprectangles.push(rect);
+            }
+
+            function sppmakeText(message, x, y, size) {
+                var txt = new Text(message, size + "pt Verdana");
+                txt.setPosition(x - txt.getWidth() / 2, y + txt.getHeight() / 2);
+                add(txt);
+                sptexting.push(txt);
+            }
+
+            function sppselectMode(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    removeAll();
+                    stopAllTimers();
+                    sprectangles.splice(0, sprectangles.length);
+                    sptexting.splice(0, sptexting.length);
+                    sptotalScore = 0;
+                    spptCurScreen = 0;
+                    start();
+                }
+                if (sprectangles[0].containsPoint(e.getX(), e.getY())) {
+                    sptotalScore += 10;
+                    spnextSlide();
+                } else if (sprectangles[1].containsPoint(e.getX(), e.getY())) {
+                    sptotalScore += 20;
+                    spnextSlide();
+                } else if (sprectangles[2].containsPoint(e.getX(), e.getY())) {
+                    sptotalScore += 30;
+                    spnextSlide();
+                } else if (sprectangles[3].containsPoint(e.getX(), e.getY())) {
+                    sptotalScore += 40;
+                    spnextSlide();
+                }
+            }
+
+            function spnextSlide() {
+                spptCurScreen++;
+
+                switch (spptCurScreen) {
+                    case 1:
+                        spptCleanUp();
+                        spmakeText("Very dumb", getWidth() / 4, getHeight() / 2.5, 20);
+                        spmakeText("Dumb", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        spmakeText("Smart", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("Very smart", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("How intelligent are you?", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+                    case 2:
+                        spptCleanUp();
+                        spmakeText("Lonely", getWidth() / 4, getHeight() / 2.5, 20);
+                        spmakeText("Social", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        spmakeText("Serious", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("Charismatic", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("Your personality is...", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+                    case 3:
+                        spptCleanUp();
+                        spmakeText("Solo", getWidth() / 4, getHeight() / 2.5, 20);
+                        spmakeText("A sidekick", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        spmakeText("Wimpy", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("Brave", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("As a hero you would be...", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+                    case 4:
+                        spptCleanUp();
+                        spmakeText("Call the police", getWidth() / 4, getHeight() / 2.5, 20);
+                        spmakeText("Run away", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        spmakeText("Attack the robber", getWidth() / 4, getHeight() * 4 / 5, 15);
+                        spmakeText("Nothing", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("During a robbery, you will...", getWidth() * 2.85 / 5, 50, 17);
+                        break;
+                    case 5:
+                        spptCleanUp();
+                        spmakeText("Yellow", getWidth() / 4, getHeight() / 2.5, 20);
+                        spmakeText("Black", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        spmakeText("Red", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("Blue", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("Your favorite color is...", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+                    case 6:
+                        spptCleanUp();
+                        spmakeText("Hi-tech weapons", getWidth() / 4, getHeight() / 2.5, 17);
+                        spmakeText("Superior intelligence", getWidth() * 3 / 4, getHeight() / 2.5, 14);
+                        spmakeText("Super speed", getWidth() / 4, getHeight() * 4 / 5, 18);
+                        spmakeText("Expertise in fighting", getWidth() * 3 / 4, getHeight() * 4 / 5, 14);
+                        spmakeText("Your weapon is...", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+                    case 7:
+                        spptCleanUp();
+                        spmakeText("Yes", getWidth() / 4, getHeight() / 2.5, 18);
+                        spmakeText("No", getWidth() * 3 / 4, getHeight() / 2.5, 18);
+                        spmakeText("Maybe", getWidth() / 4, getHeight() * 4 / 5, 18);
+                        spmakeText("Not sure", getWidth() * 3 / 4, getHeight() * 4 / 5, 18);
+                        spmakeText("Do superheroes need villains?", getWidth() * 2.85 / 5, 50, 16);
+                        break;
+                    case 8:
+                        spptCleanUp();
+                        spmakeText("Tough", getWidth() / 4, getHeight() / 2.5, 20);
+                        spmakeText("Normal", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        spmakeText("Complicated", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("Great", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("Your childhood experience was...", getWidth() * 2.85 / 5, 50, 14);
+                        break;
+                    case 9:
+                        spptCleanUp();
+                        spmakeText("Revenge", getWidth() / 4, getHeight() / 2.5, 20);
+                        spmakeText("Impressing others", getWidth() * 3 / 4, getHeight() / 2.5, 16);
+                        spmakeText("Fame", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("Helping others", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        spmakeText("Reason for being a superhero?", getWidth() * 2.85 / 5, 50, 14);
+                        break;
+                    default:
+                        spptCleanUp();
+                        removeAll();
+                        stopAllTimers();
+                        spptEndGame();
+                }
+            }
+
+            function spptEndGame() {
+                cdMusic.pause();
+                var rect = new Rectangle(getWidth(), getHeight());
+                rect.setPosition(0, 0);
+                rect.setColor("#b0e8d3");
+                add(rect);
+
+                spmakeText("Your score is: " + sptotalScore, getWidth() / 2, getHeight() / 5, 25);
+                spmakeText("Your inner superhero is: ", getWidth() / 2, getHeight() * 3 / 5, 20);
+
+                var sphero = "anything";
+
+                if (sptotalScore >= 100 && sptotalScore <= 110) {
+                    sphero = "The Thing";
+                } else if (sptotalScore == 120) {
+                    sphero = "Flash";
+                } else if (sptotalScore >= 130 && sptotalScore <= 140) {
+                    sphero = "Daredevil";
+                } else if (sptotalScore >= 150 && sptotalScore <= 160) {
+                    sphero = "Cyclops";
+                } else if (sptotalScore == 170) {
+                    sphero = "Batman";
+                } else if (sptotalScore >= 180 && sptotalScore <= 190) {
+                    sphero = "Human Torch";
+                } else if (sptotalScore >= 200 && sptotalScore <= 210) {
+                    sphero = "Wolverine";
+                } else if (sptotalScore >= 220 && sptotalScore <= 230) {
+                    sphero = "Hellboy";
+                } else if (sptotalScore >= 240 && sptotalScore <= 250) {
+                    sphero = "Deadpool";
+                } else if (sptotalScore >= 260 && sptotalScore <= 270) {
+                    sphero = "Goku";
+                } else if (sptotalScore == 280) {
+                    sphero = "Thor";
+                } else if (sptotalScore >= 290 && sptotalScore <= 300) {
+                    sphero = "Green Lantern";
+                } else if (sptotalScore >= 310 && sptotalScore <= 320) {
+                    sphero = "Ironman";
+                } else if (sptotalScore == 330) {
+                    sphero = "Hulk";
+                } else if (sptotalScore >= 340 && sptotalScore <= 350) {
+                    sphero = "Superman";
+                } else if (sptotalScore >= 360 && sptotalScore <= 370) {
+                    sphero = "Captain America";
+                } else if (sptotalScore == 380) {
+                    sphero = "Optimus Prime";
+                } else if (sptotalScore >= 390 && sptotalScore <= 400) {
+                    sphero = "Spiderman";
+                }
+
+                var spresultTxt = new Text(sphero, "30pt Verdana");
+                spresultTxt.setPosition(getWidth() / 2 - spresultTxt.getWidth() / 2, getHeight() / 2 + spresultTxt.getHeight() / 2 + 100);
+                spresultTxt.setColor(Color.RED);
+                add(spresultTxt);
+                backButton();
+
+
+                mouseClickMethod(spempty);
+            }
+
+            function spempty(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    removeAll();
+                    stopAllTimers();
+
+                    sprectangles.splice(0, sprectangles.length);
+                    sptexting.splice(0, sprectangles.length);
+                    sptotalScore = 0;
+                    spptCurScreen = 0;
+                    start();
+                }
+            }
+
+            function spptCleanUp() {
+                for (var i = sptexting.length - 1; i >= 0; i--) {
+                    remove(sptexting[i]);
+                    sptexting.remove(i);
+                }
+            }
+
+            var cptrectangles = [];
+            var cpttexting = [];
+            //var cptback;
+            var cpttotalScore = 0;
+            var cptCurScreen = 0;
+
+
+            function cptmakeRect(x, y, color) {
+                cdMusic.play();
+                var rect = new Rectangle(getWidth() / 2, getHeight() / 2.5);
+                rect.setPosition(x, y);
+                rect.setColor(color);
+                cptrectangles.push(rect);
+                add(rect);
+            }
+
+            function cptmakeText(message, x, y, size) {
+                var txt = new Text(message, size + "pt Verdana");
+                txt.setPosition(x - txt.getWidth() / 2, y + txt.getHeight() / 2);
+                cpttexting.push(txt);
+                add(txt);
+            }
+
+            function cptselectMode(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    removeAll();
+                    stopAllTimers();
+                    cptrectangles.splice(0, cptrectangles.length);
+                    cpttexting.splice(0, cpttexting.length);
+                    cpttotalScore = 0;
+                    cptCurScreen = 0;
+                    start();
+                } else {
+                    if (cptrectangles[0].containsPoint(e.getX(), e.getY())) {
+                        cpttotalScore += 10;
+                        cptnextSlide();
+                    } else if (cptrectangles[1].containsPoint(e.getX(), e.getY())) {
+                        cpttotalScore += 20;
+                        cptnextSlide();
+                    } else if (cptrectangles[2].containsPoint(e.getX(), e.getY())) {
+                        cpttotalScore += 30;
+                        cptnextSlide();
+                    } else if (cptrectangles[3].containsPoint(e.getX(), e.getY())) {
+                        cpttotalScore += 40;
+                        cptnextSlide();
+                    }
+                }
+            }
+
+            function cptnextSlide() {
+                cptCurScreen++;
+
+                switch (cptCurScreen) {
+                    case 1:
+                        cptCleanUp();
+                        cptmakeText("Funny", getWidth() / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Communicative", getWidth() * 3 / 4, getHeight() / 2.5, 18);
+                        cptmakeText("Argumentative", getWidth() / 4, getHeight() * 4 / 5, 18);
+                        cptmakeText("Guide/Mentor", getWidth() * 3 / 4, getHeight() * 4 / 5, 19);
+                        cptmakeText("You are:", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+                    case 2:
+                        cptCleanUp();
+                        cptmakeText("Silly", getWidth() / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Formal", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Fashionable", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("Comfortable", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("Choose a type of outfit to wear:", getWidth() * 2.85 / 5, 50, 15);
+                        break;
+                    case 3:
+                        cptCleanUp();
+                        cptmakeText("Drawing", getWidth() / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Constructing", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Persuading", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("Learning", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("What sounds like fun?", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+                    case 4:
+                        cptCleanUp();
+                        cptmakeText("Brave", getWidth() / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Social", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Smart", getWidth() / 4, getHeight() * 4 / 5, 19);
+                        cptmakeText("Caring", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("Which best describes you?", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+                    case 5:
+                        cptCleanUp();
+                        cptmakeText("Yellow", getWidth() / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Black", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Red", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("Blue", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("Your favorite color is...", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+                    case 6:
+                        cptCleanUp();
+                        cptmakeText("I hate learning", getWidth() / 4, getHeight() / 2.5, 17);
+                        cptmakeText("Math", getWidth() * 3 / 4, getHeight() / 2.5, 16);
+                        cptmakeText("Literature", getWidth() / 4, getHeight() * 4 / 5, 18);
+                        cptmakeText("Science", getWidth() * 3 / 4, getHeight() * 4 / 5, 17);
+                        cptmakeText("Which is your favorite subject?", getWidth() * 2.85 / 5 - 10, 50, 15);
+                        break;
+                    case 7:
+                        cptCleanUp();
+                        cptmakeText("Be creative", getWidth() / 4, getHeight() / 2.5, 18);
+                        cptmakeText("Work in an office", getWidth() * 3 / 4, getHeight() / 2.5, 16);
+                        cptmakeText("Solve problems", getWidth() / 4, getHeight() * 4 / 5, 18);
+                        cptmakeText("Help people", getWidth() * 3 / 4, getHeight() * 4 / 5, 18);
+                        cptmakeText("What would you like to do at work?", getWidth() * 2.85 / 5, 50, 14);
+                        break;
+                    case 8:
+                        cptCleanUp();
+                        cptmakeText("Extrovert", getWidth() / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Talkative", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Observant", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("Smart", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("What kind of a person are you?", getWidth() * 2.85 / 5 - 5, 50, 15);
+                        break;
+                    case 9:
+                        cptCleanUp();
+                        cptmakeText("Freedom", getWidth() / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Creativity", getWidth() * 3 / 4, getHeight() / 2.5, 18);
+                        cptmakeText("Justice", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("Fame", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("Which is most important in life?", getWidth() * 2.85 / 5 - 3, 50, 15);
+                        break;
+                    case 10:
+                        cptCleanUp();
+                        cptmakeText("Business", getWidth() / 4, getHeight() / 2.5, 20);
+                        cptmakeText("Lesson", getWidth() * 3 / 4, getHeight() / 2.5, 18);
+                        cptmakeText("File", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("Style", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        cptmakeText("Pick a word:", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+
+                    default:
+                        cptCleanUp();
+                        removeAll();
+                        stopAllTimers();
+                        cptEndGame();
+                }
+            }
+
+            function cptEndGame() {
+                var rect = new Rectangle(getWidth(), getHeight());
+                rect.setPosition(0, 0);
+                rect.setColor("#b0e8d3");
+                add(rect);
+
+                cptmakeText("Your score is: " + cpttotalScore, getWidth() / 2, getHeight() / 5, 25);
+                cptmakeText("The career that suits you is:", getWidth() / 2, getHeight() * 3 / 5, 20);
+                var crHero = "covid 19 quarentine";
+
+                if (cpttotalScore >= 100 && cpttotalScore <= 150) {
+                    crHero = "Entrepreneur";
+                } else if (cpttotalScore >= 160 && cpttotalScore <= 200) {
+                    crHero = "Fashion Designer";
+                } else if (cpttotalScore >= 210 && cpttotalScore <= 250) {
+                    crHero = "Engineer";
+                } else if (cpttotalScore >= 260 && cpttotalScore <= 300) {
+                    crHero = "Lawyer";
+                } else if (cpttotalScore >= 310 && cpttotalScore <= 350) {
+                    crHero = "Teacher";
+                } else if (cpttotalScore >= 360 && cpttotalScore <= 400) {
+                    crHero = "Doctor";
+                }
+
+                var sresulttxt = new Text(crHero, "30pt Verdana");
+                sresulttxt.setPosition(getWidth() / 2 - sresulttxt.getWidth() / 2, getHeight() / 2 + sresulttxt.getHeight() / 2 + 100);
+                sresulttxt.setColor(Color.red);
+                add(sresulttxt);
+                cdMusic.pause();
+                mouseClickMethod(cptempty);
+                backButton();
+            }
+            function cptempty(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    removeAll();
+                    stopAllTimers();
+
+                    cptrectangles.splice(0, cptrectangles.length);
+                    cpttexting.splice(0, cpttexting.length);
+                    cpttotalScore = 0;
+                    cptCurScreen = 0;
+                    start();
+                }
+            }
+            function cptCleanUp() {
+                for (var i = cpttexting.length - 1; i >= 0; i--) {
+                    remove(cpttexting[i]);
+                    cpttexting.remove(i);
+                }
+            }
+
+
+
+            var coptrectangles = [];
+            var copttexting = [];
+            var copttotalScore = 0;
+            var coptCurScreen = 0;
+
+
+            function coptmakeRect(x, y, color) {
+                cdMusic.play();
+                var rect = new Rectangle(getWidth() / 2, getHeight() / 2.5);
+                rect.setPosition(x, y);
+                rect.setColor(color);
+                coptrectangles.push(rect);
+                add(rect);
+            }
+
+            function coptmakeText(message, x, y, size) {
+                var txt = new Text(message, size + "pt Verdana");
+                txt.setPosition(x - txt.getWidth() / 2, y + txt.getHeight() / 2);
+                copttexting.push(txt);
+                add(txt);
+            }
+
+            function coptselectMode(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    removeAll();
+                    stopAllTimers();
+                    coptrectangles.splice(0, coptrectangles.length);
+                    copttexting.splice(0, copttexting.length);
+                    copttotalScore = 0;
+                    coptCurScreen = 0;
+                    start();
+                } else {
+                    if (coptrectangles[0].containsPoint(e.getX(), e.getY())) {
+                        copttotalScore += 10;
+                        coptnextSlide();
+                    } else if (coptrectangles[1].containsPoint(e.getX(), e.getY())) {
+                        copttotalScore += 20;
+                        coptnextSlide();
+                    } else if (coptrectangles[2].containsPoint(e.getX(), e.getY())) {
+                        copttotalScore += 30;
+                        coptnextSlide();
+                    } else if (coptrectangles[3].containsPoint(e.getX(), e.getY())) {
+                        copttotalScore += 40;
+                        coptnextSlide();
+                    }
+                }
+
+            }
+
+            function coptnextSlide() {
+
+                coptCurScreen++;
+                switch (coptCurScreen) {
+                    case 1:
+                        coptCleanUp();
+                        coptmakeText("Fall", getWidth() / 4, getHeight() / 2.5, 20);
+                        coptmakeText("Winter", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        coptmakeText("Summer", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        coptmakeText("Spring", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        coptmakeText("What is your favorite season?", getWidth() * 2.85 / 5 - 5, 50, 15);
+                        break;
+                    case 2:
+                        coptCleanUp();
+                        coptmakeText("How you say it", getWidth() / 4, getHeight() / 2.5, 15);
+                        coptmakeText("Whom you say it to", getWidth() * 3 / 4, getHeight() / 2.5, 14);
+                        coptmakeText("Effects of saying it", getWidth() / 4, getHeight() * 4 / 5, 15);
+                        coptmakeText("What you say", getWidth() * 3 / 4, getHeight() * 4 / 5, 18);
+                        coptmakeText("Which is most important to you?", getWidth() * 2.85 / 5, 50, 15);
+                        break;
+                    case 3:
+                        coptCleanUp();
+                        coptmakeText("Mother Teresa", getWidth() / 4, getHeight() / 2.5, 17);
+                        coptmakeText("Sigmund Freud", getWidth() * 3 / 4, getHeight() / 2.5, 17);
+                        coptmakeText("Albert Einstein", getWidth() / 4, getHeight() * 4 / 5, 17);
+                        coptmakeText("Napolean Bonaparte", getWidth() * 3 / 4, getHeight() * 4 / 5, 14);
+                        coptmakeText("Whom do you want advice from?", getWidth() * 2.85 / 5 - 6, 50, 14);
+                        break;
+                    case 4:
+                        coptCleanUp();
+                        coptmakeText("White", getWidth() / 4, getHeight() / 2.5, 20);
+                        coptmakeText("Purple", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        coptmakeText("Pink", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        coptmakeText("Red", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        coptmakeText("Which color best represents love?", getWidth() * 2.85 / 5 - 5, 50, 14);
+                        break;
+                    case 5:
+                        coptCleanUp();
+                        coptmakeText("Drawing", getWidth() / 4, getHeight() / 2.5, 20);
+                        coptmakeText("Playing an instrument", getWidth() * 3 / 4, getHeight() / 2.5, 13);
+                        coptmakeText("Dancing", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        coptmakeText("Singing", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        coptmakeText("Which talent do you wish you had?", getWidth() * 2.85 / 5, 50, 14);
+                        break;
+                    case 6:
+                        coptCleanUp();
+                        coptmakeText("Definitely no", getWidth() / 4, getHeight() / 2.5, 20);
+                        coptmakeText("Don't know", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        coptmakeText("Depends", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        coptmakeText("Yes", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        coptmakeText("Do you want to know your death's casue?", getWidth() * 2.85 / 5, 50, 12);
+                        break;
+                    case 7:
+                        coptCleanUp();
+                        coptmakeText("Grandparent", getWidth() / 4, getHeight() / 2.5, 18);
+                        coptmakeText("Parent", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        coptmakeText("Sibling", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        coptmakeText("Other", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        coptmakeText("Who are you closest to in your family?", getWidth() * 2.85 / 5, 50, 13);
+                        break;
+                    case 8:
+                        coptCleanUp();
+                        coptmakeText("Blue", getWidth() / 4, getHeight() / 2.5, 20);
+                        coptmakeText("Green", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        coptmakeText("Red", getWidth() / 4, getHeight() * 4 / 5 - 8, 20);
+                        coptmakeText("Black", getWidth() * 3 / 4, getHeight() * 4 / 5 - 10, 20);
+                        coptmakeText("What is the best color for a car?", getWidth() * 2.85 / 5, 50, 15);
+                        break;
+                    case 9:
+                        coptCleanUp();
+                        coptmakeText("Blue", getWidth() / 4, getHeight() / 2.5, 20);
+                        coptmakeText("Both", getWidth() * 3 / 4, getHeight() / 2.5, 18);
+                        coptmakeText("I don't use pens", getWidth() / 4, getHeight() * 4 / 5, 15);
+                        coptmakeText("Black", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        coptmakeText("Do you prefer blue or black ink for pens?", getWidth() * 2.85 / 5, 50, 12);
+                        break;
+
+                    default:
+                        coptCleanUp();
+                        removeAll();
+                        stopAllTimers();
+                        coptEndGame();
+                }
+            }
+
+            function coptEndGame() {
+                var rect = new Rectangle(getWidth(), getHeight());
+                rect.setPosition(0, 0);
+                rect.setColor("#b0e8d3");
+                add(rect);
+
+                coptmakeText("Your score is: " + copttotalScore, getWidth() / 2, getHeight() / 5, 25);
+                coptmakeText("Your true favorite color is:", getWidth() / 2, getHeight() * 3 / 5, 20);
+                var corHero = "covid 19 quarentine";
+
+                if (copttotalScore >= 100 && copttotalScore <= 170) {
+                    corHero = "Blue";
+                } else if (copttotalScore >= 180 && copttotalScore <= 250) {
+                    corHero = "White";
+                } else if (copttotalScore >= 260 && copttotalScore <= 330) {
+                    corHero = "Yellow";
+                } else if (copttotalScore >= 340 && copttotalScore <= 400) {
+                    corHero = "Red";
+                }
+
+
+                var sresulttxt = new Text(corHero, "30pt Verdana");
+                sresulttxt.setPosition(getWidth() / 2 - sresulttxt.getWidth() / 2, getHeight() / 2 + sresulttxt.getHeight() / 2 + 100);
+                sresulttxt.setColor(Color.red);
+                add(sresulttxt);
+                cdMusic.pause()
+                mouseClickMethod(coptempty);
+                backButton();
+            }
+            function coptempty(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    removeAll();
+                    stopAllTimers();
+
+                    coptrectangles.splice(0, coptrectangles.length);
+                    copttexting.splice(0, copttexting.length);
+                    copttotalScore = 0;
+                    coptCurScreen = 0;
+                    start();
+                }
+            }
+            function coptCleanUp() {
+                for (var i = copttexting.length - 1; i >= 0; i--) {
+                    remove(copttexting[i]);
+                    copttexting.remove(i);
+                }
+            }
+
+            var aptrectangles = [];
+            var apttexting = [];
+            var apttotalScore = 0;
+            var aptptCurScreen = 0;
+
+            function aptmakeRect(x, y, color) {
+                cdMusic.play();
+                var rect = new Rectangle(getWidth() / 2, getHeight() / 2.5);
+                rect.setPosition(x, y);
+                rect.setColor(color);
+                aptrectangles.push(rect);
+                add(rect);
+            }
+
+            function aptmakeText(message, x, y, size) {
+                var txt = new Text(message, size + "pt Arial");
+                txt.setPosition(x - txt.getWidth() / 2, y + txt.getHeight() / 2);
+                apttexting.push(txt);
+                add(txt);
+            }
+
+            function aptselectMode(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    removeAll();
+                    stopAllTimers();
+
+                    aptrectangles.splice(0, aptrectangles.length);
+                    apttexting.splice(0, apttexting.length);
+                    apttotalScore = 0;
+                    aptptCurScreen = 0;
+                    start();
+                } else {
+                    if (aptrectangles[0].containsPoint(e.getX(), e.getY())) {
+                        apttotalScore += 10;
+                        aptnextSlide();
+                    } else if (aptrectangles[1].containsPoint(e.getX(), e.getY())) {
+                        apttotalScore += 20;
+                        aptnextSlide();
+                    } else if (aptrectangles[2].containsPoint(e.getX(), e.getY())) {
+                        apttotalScore += 30;
+                        aptnextSlide();
+                    } else if (aptrectangles[3].containsPoint(e.getX(), e.getY())) {
+                        apttotalScore += 40;
+                        aptnextSlide();
+                    }
+                }
+            }
+
+            function aptnextSlide() {
+                aptptCurScreen++;
+                switch (aptptCurScreen) {
+                    case 1:
+                        aptptCleanUp();
+                        aptmakeText("Boat", getWidth() / 4, getHeight() / 2.5, 20);
+                        aptmakeText("Fireplace at Home", getWidth() * 3 / 4, getHeight() / 2.5, 15);
+                        aptmakeText("Airplane", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        aptmakeText("Tent in the Woods", getWidth() * 3 / 4, getHeight() * 4 / 5, 15);
+                        aptmakeText("Where do you feel most comfortable?", getWidth() * 2.85 / 5, 50, 15);
+                        break;
+                    case 2:
+                        aptptCleanUp();
+                        aptmakeText("Sports", getWidth() / 4, getHeight() / 2.5, 20);
+                        aptmakeText("Science", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        aptmakeText("Art", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        aptmakeText("Tackling challenges", getWidth() * 3 / 4, getHeight() * 4 / 5, 16);
+                        aptmakeText("What is your interest?", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+                    case 3:
+                        aptptCleanUp();
+                        aptmakeText("Meat", getWidth() / 4, getHeight() / 2.5, 20);
+                        aptmakeText("Chocolate", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        aptmakeText("Street food", getWidth() / 4, getHeight() * 4 / 5, 20);
+                        aptmakeText("Fast food", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        aptmakeText("What is your favorite food?", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+                    case 4:
+                        aptptCleanUp();
+                        aptmakeText("Work alone", getWidth() / 4, getHeight() / 2.5, 20);
+                        aptmakeText("Leader of team", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        aptmakeText("Make others do everything", getWidth() / 4, getHeight() * 4 / 5, 12);
+                        aptmakeText("I like teamwork", getWidth() * 3 / 4, getHeight() * 4 / 5, 18);
+                        aptmakeText("What is your role in a team?", getWidth() * 2.85 / 5 - 5, 50, 15);
+                        break;
+                    case 5:
+                        aptptCleanUp();
+                        aptmakeText("Public humiliation", getWidth() / 4, getHeight() / 2.5, 15);
+                        aptmakeText("Stuck in a dark place", getWidth() * 3 / 4, getHeight() / 2.5, 15);
+                        aptmakeText("Losing all friends", getWidth() / 4, getHeight() * 4 / 5, 15);
+                        aptmakeText("Getting no appreciation", getWidth() * 3 / 4, getHeight() * 4 / 5, 14);
+                        aptmakeText("Which is your biggest fear?", getWidth() * 2.85 / 5, 50, 18);
+                        break;
+                    case 6:
+                        aptptCleanUp();
+                        aptmakeText("AM I DREAMING?!", getWidth() / 4, getHeight() / 2.5, 15);
+                        aptmakeText("Donate to charity", getWidth() * 3 / 4, getHeight() / 2.5, 16);
+                        aptmakeText("Go on a vacation", getWidth() / 4, getHeight() * 4 / 5, 16);
+                        aptmakeText("Buy gifts for loved ones", getWidth() * 3 / 4, getHeight() * 4 / 5, 13);
+                        aptmakeText("What would you do with $1,000,000?", getWidth() * 2.85 / 5, 50, 14);
+                        break;
+                    case 7:
+                        aptptCleanUp();
+                        aptmakeText("Leading the group", getWidth() / 4, getHeight() / 2.5, 17);
+                        aptmakeText("Building shelter", getWidth() * 3 / 4, getHeight() / 2.5, 12);
+                        aptmakeText("Cheering everyone up", getWidth() / 4, getHeight() * 4 / 5, 12);
+                        aptmakeText("Finding food and water", getWidth() * 3 / 4, getHeight() * 4 / 5, 12);
+                        aptmakeText("Your group is stuck on an island. What is your role?", getWidth() * 2.85 / 5, 50, 11);
+                        break;
+                    case 8:
+                        aptptCleanUp();
+                        aptmakeText("Work hard, play harder", getWidth() / 4, getHeight() / 2.5, 13);
+                        aptmakeText("Take care of our planet", getWidth() * 3 / 4, getHeight() / 2.5, 13);
+                        aptmakeText("Travel the world", getWidth() / 4, getHeight() * 4 / 5 - 8, 18);
+                        aptmakeText("Respect others", getWidth() * 3 / 4, getHeight() * 4 / 5 - 10, 18);
+                        aptmakeText("What would you tell someone 1,000 years from now?", getWidth() * 2.85 / 5, 50, 10.5);
+                        break;
+                    case 9:
+                        aptptCleanUp();
+                        aptmakeText("Mount Everest", getWidth() / 4, getHeight() / 2.5, 20);
+                        aptmakeText("Paris", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                        aptmakeText("Amazon Rainforest", getWidth() / 4, getHeight() * 4 / 5, 16);
+                        aptmakeText("Bali", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                        aptmakeText("If you could teleport anywhere, where would you go?", getWidth() * 2.85 / 5, 50, 10.5);
+                        break;
+
+                    default:
+                        aptptCleanUp();
+                        removeAll();
+                        stopAllTimers();
+                        aptptEndGame();
+                }
+            }
+
+            function aptptEndGame() {
+                var rect = new Rectangle(getWidth(), getHeight());
+                rect.setPosition(0, 0);
+                rect.setColor("#b0e8d3");
+                add(rect);
+
+                aptmakeText("Your score is: " + apttotalScore, getWidth() / 2, getHeight() / 5, 25);
+                aptmakeText("Your spirit animal is:", getWidth() / 2, getHeight() * 3 / 5, 20);
+
+                var atHero = "covid 19 quarentine";
+                if (apttotalScore >= 100 && apttotalScore <= 170) {
+                    atHero = "Wolf";
+                } else if (apttotalScore >= 180 && apttotalScore <= 250) {
+                    atHero = "Panther";
+                } else if (apttotalScore >= 260 && apttotalScore <= 350) {
+                    atHero = "Giraffe";
+                } else if (apttotalScore >= 330 && apttotalScore <= 400) {
+                    atHero = "Bear";
+                }
+
+                var sresulttxt = new Text(atHero, "30pt Arial");
+                sresulttxt.setPosition(getWidth() / 2 - sresulttxt.getWidth() / 2, getHeight() / 2 + sresulttxt.getHeight() / 2 + 100);
+                sresulttxt.setColor(Color.red);
+                add(sresulttxt);
+                cdMusic.pause();
+                backButton();
+                mouseClickMethod(aptempty);
+            }
+            function aptempty(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    removeAll();
+                    stopAllTimers();
+
+                    aptrectangles.splice(0, aptrectangles.length);
+                    apttexting.splice(0, apttexting.length);
+                    apttotalScore = 0;
+                    aptptCurScreen = 0;
+                    start();
+                }
+            }
+            function aptptCleanUp() {
+                for (var i = apttexting.length - 1; i >= 0; i--) {
+                    remove(apttexting[i]);
+                    apttexting.remove(i);
+                }
+            }
+            if (typeof start === 'function') {
+                start();
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
