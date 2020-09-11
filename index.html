@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Gaminations</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <style>
+        .above {
+            text-align: center;
+            color: purple;
+        }
+
+        #user {
+            text-align: center
+        }
+
+        .info {
+            padding: 10px;
+        }
+        img{
+            width: 200x;
+        }
+        .section {
+            padding: 10%;
+        }
+        body{
+            padding: 10px;
+            font-family: serif;
+        }
+    </style>
+</head>
+
+<body>
+    <!--Title and names-->
+    <h1 id="about" class="above">Welcome to Gaminations!</h1><br/>
+    <h2 id="credit" class="above">By: Arjun Sudheer, Aditya Rao, and Saket Gajavada</h2><br/>
+    <!--Username form that uses jQuery to update-->
+    <form name="username">
+        <h3 id="user">Enter your username: <input type="text" id="naming" placeholder="Enter your username"> <input
+                type="button" class="btn btn-success" id="submit" onclick="changeName()" value="Enter"></h3>
+    </form><br/>
+    <!--jQuery for username updating-->
+    <script>
+        function changeName() {
+            $("#about").html("Welcome to Gaminations " + document.getElementById("naming").value + "!");
+            document.getElementById("naming").value = "";
+        }
+    </script>
+    <!--Paragraphs-->
+    <p class="info">Welcome to Gaminations! Ever since a downfall of events started, entertainment has become more
+        important than ever before. Fortunately, Gaminations is here! Our website is a great form of entertainment. To
+        play you can click on the different screens to go to different applications.</p><br />
+    <p class="info">Quarantine. COVID-19. As a result of the global pandemic, most of us need to stay at home.
+        Oftentimes, things can get boring, and we all are in need of some new form of entertainment. That’s where
+        Gaminations steps in. We have a variety of games, animations, personality tests, and user input related
+        activities to keep all users engaged for hours together. There are loads of different types of activities to
+        choose from. For example, Castle Defense, where you have to explode the cannonballs to prevent the castle from
+        getting destroyed. We also have personality tests which reveal the fate of your inner superhero, color, animal,
+        and also predicts your future career. You can also enjoy the four activities that are based primarily on user
+        input, which include Paint and also games that are played against the computer like Rock Paper Scissors, Guess
+        My Number and Coin Toss. There are also four interactive and colorful animations that you can explore: Confetti,
+        Splatter, Pac Snow, and Bounce. There is a wide variety to Gaminations, and you can count on it to keep you
+        entertained!
+    </p><br>
+    <!--Image links and message-->
+    <h2 class="above">Please choose a category below:</h2>
+    <div class="container">
+        <nav>
+            <div class="row">
+                <div class="col-xs-6 col-sm-4 col-md-3 col-ls-2">
+                    <a href="Games.html" class="section"><img src="Games.png" alt="Games icon" /></a>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3 col-ls-2">
+                    <a href="Animations.html" class="section"><img src="Animations.png" alt="Animations icon" /></a>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3 col-ls-2">
+                    <a href="PTests.html" class="section"><img src="Ptest.png" alt="Personality Tests icon" /></a>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3 col-ls-2">
+                    <a href="UIA.html" class="section"><img src="UIA.png" alt="User input activities icon" /></a>
+                </div>
+                
+            </div>
+        </nav>
+    </div>
+    <!--Closing paragraph-->
+    <p class="info">No matter what the situation, you can always trust Gaminations to entertain you. With several games,
+        animations, personality tests, and user input related activities, you will be engaged for hours. There is plenty
+        of customization and variety throughout Gaminations, so next time you feel bored, just remember that Gaminations
+        is here for you! </p>
+</body>
