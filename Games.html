@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Games</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript"
+        src="https://static.codehs.com/gulp/d07a4ef9e3f06b69e1b3e361697c7c4216ad6ae0/chs-js-lib/chs.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: inline-block;
+            vertical-align: top;
+            margin-left: 34%;
+        }
+
+        .about {
+            text-align: center;
+            color: red;
+        }
+
+        #backButton {
+            position: relative;
+            left: 37%;
+        }
+
+        #backMessage {
+            position: relative;
+            left: 50%;
+            bottom: 60px;
+        }
+
+        #info {
+            text-align: center;
+        }
+
+        .linking {
+            padding: 5px;
+        }
+
+        .linking:hover {
+            background-color: red;
+        }
+        body{
+            padding: 10px;
+            font-family: serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="about">Games</h1><br />
+    <nav>
+        <a href="index.html" id="backButton"><img src="BackButton.png" alt="Image of a backbutton." /></a>
+        <p id="backMessage">Click the back button to return to the home page.</p>
+    </nav>
+    <h3 class="about">Please click the links for instructions on each activity:</h3>
+    <div class="container">
+        <nav>
+            <div class="row">
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(1)" class="linking">Castle Defense Instructions</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(2)" class="linking">Spike Jump Instructions</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(3)" class="linking">Archery Instructions</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <a href="#" onclick="updateInfo(4)" class="linking">Collection Instructions</a>
+                </div> 
+            </div>
+        </nav>
+    </div>
+    <br />
+    <p id="info">Please select a link for instructions.</p>
+    <script>
+        function updateInfo(num) {
+            switch (num) {
+                case 1:
+                    $("#info").html("Castle Defense Instructions: Select the powerup you want to activate. Move the rod by moving your mouse and block the cannonballs from hitting the castle. You can click on the ability box during the game to activate your ability. But keep in mind that you only have 1 use per match.");
+                    break;
+                case 2:
+                    $("#info").html("Spike Jump Instructions: The player is the blue bird. Click your mouse to jump over the cacti and birds. Avoid colliding with the cacti and birds.");
+                    break;
+                case 3:
+                    $("#info").html("Archery Instructions: You have twenty seconds to shoot as many arrows into the target as you can by clicking on the target. The closer to the center you click, the more points you will be awarded. The Xs also let you know what color on the target you just hit. A miss results in a pink-colored X. Keep in mind the movement of the target.");
+                    break;
+                case 4:
+                    $("#info").html("Collection Instructions: Move your basket by sliding the mouse to catch balls. Red balls cause you to lose points, black balls result in an immediate loss, and green and white balls add to your score.");
+                    break;
+                default:
+                    $("#info").html("Please select a link for instructions.");
+            }
+        }
+    </script>
+    <canvas width="400" height="500" class="codehs-editor-canvas"></canvas>
+
+    <script>
+        window.onload = function () {
+            var cdMusic = new Audio("https://codehs.com/uploads/8179d3793582c02c44438d0160d6f0a5");
+            var sprectangles = [];
+            var sptexting = [];
+            var bg;
+            var projNameTxt;
+            var nameTxt;
+            var iswitch;
+            var iscolor = Color.green;
+            var iswitchtxt;
+
+            function start() {
+
+                bg = new Rectangle(getWidth(), 115);
+                bg.setPosition(0, 0);
+                bg.setColor("#dcd9ff");
+                add(bg);
+                projNameTxt = new Text("Games", "35pt Verdana");
+                projNameTxt.setPosition(getWidth() / 2 - projNameTxt.getWidth() / 2, 65);
+                projNameTxt.setColor("#7700b8");
+                add(projNameTxt);
+
+
+
+
+                spmakeRect(0, getHeight() - 2 * getHeight() / 2.5, Color.red);
+                spmakeRect(getWidth() / 2, getHeight() - 2 * getHeight() / 2.5, Color.cyan);
+                spmakeRect(0, getHeight() - getHeight() / 2.5, Color.green);
+                spmakeRect(getWidth() / 2, getHeight() - getHeight() / 2.5, Color.yellow);
+                spmakeText("Castle Defense", getWidth() / 4, getHeight() / 2.5, 20);
+                spmakeText("Spike Jump", getWidth() * 3 / 4, getHeight() / 2.5, 20);
+                spmakeText("Archery", getWidth() / 4, getHeight() * 4 / 5, 20);
+                spmakeText("Collection", getWidth() * 3 / 4, getHeight() * 4 / 5, 20);
+                mouseClickMethod(spselectMode);
+
+            }
+
+
+
+            function spmakeRect(x, y, color) {
+                var rect = new Rectangle(getWidth() / 2, getHeight() / 2.5);
+                rect.setPosition(x, y);
+                rect.setColor(color);
+                sprectangles.push(rect);
+                add(rect);
+            }
+
+            function spmakeText(message, x, y, size) {
+                var txt = new Text(message, size + "pt Verdana");
+                txt.setPosition(x - txt.getWidth() / 2, y + txt.getHeight() / 2);
+                sptexting.push(txt);
+                add(txt);
+            }
+
+            function spselectMode(e) {
+
+
+                if (sprectangles[0].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    cdoptions();
+                    backButton();
+                } else if (sprectangles[1].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    startJump();
+                    backButton();
+                } else if (sprectangles[2].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    var backdrop = new Rectangle(getWidth(), getHeight());
+                    backdrop.setPosition(0, 0);
+                    backdrop.setColor("#077a94");
+                    add(backdrop);
+
+                    aimer();
+                    target();
+                    setTimer(moveTarget, 78);
+                    mouseClickMethod(shootTarget);
+
+                    shotsCount = new Text("Score: 0", "15pt Verdana");
+                    shotsCount.setPosition(300, 20);
+                    shotsCount.setColor(acolor);
+                    add(shotsCount);
+
+                    accuracyCount = new Text("Accuracy: " + accuracy + "%", "15pt Verdana");
+                    accuracyCount.setPosition(65, 20);
+                    accuracyCount.setColor(acolor);
+                    add(accuracyCount);
+
+                    atimerCount = new Text("T: " + atimer, "15pt Verdana");
+                    atimerCount.setPosition(245, 20);
+                    atimerCount.setColor(acolor);
+                    add(atimerCount);
+
+                    setTimer(changeTimer, 1000);
+                    backButton();
+                } else if (sprectangles[3].containsPoint(e.getX(), e.getY())) {
+                    removeAll();
+                    stopAllTimers();
+                    cmakeGrass();
+                    cmakeSky();
+                    setTimer(cmakeBall, 1000);
+                    setTimer(cmoveBall, cDELAY);
+                    cmakeBasket();
+                    mouseMoveMethod(cmoveBasket);
+                    cscoreText = new Text(cscore, cSCORE_FONT);
+                    cscoreText.setColor(Color.blue);
+                    cscoreText.setPosition(20, 460);
+                    add(cscoreText);
+                    backButton();
+                }
+
+
+            }
+            var back;
+
+
+            function backButton() {
+
+                back = new Rectangle(60, 60);
+                back.setPosition(0, 0);
+                add(back);
+                var lines = new Line(20, 30, 50, 30);
+                lines.setPosition(20, 30);
+                lines.setColor(Color.white);
+                add(lines);
+                var upSlant = new Line(10, 30, 30, 10);
+                upSlant.setPosition(10, 30);
+                upSlant.setColor(Color.white);
+                add(upSlant);
+                var downSlant = new Line(10, 30, 30, 50);
+                downSlant.setPosition(10, 30);
+                downSlant.setColor(Color.white);
+                add(downSlant);
+
+            }
+
+
+
+            var cddefenseLine;
+            var cdoption = [];
+            var cdtxts = [];
+            var cdmode = 0;
+            var cdscore;
+            var cdtimer = 90;
+            var cdballs = [];
+            var cdused = false;
+            var cdabilityShot;
+            var cdon = false;
+            var seccdondLife = false;
+            var seccdondText;
+            var cdstarting = 0;
+
+
+            function cdoptions() {
+                cdmakeRect(getWidth(), getHeight() / 4, 0, getHeight() / 4, Color.red);
+                cdmakeText("Long Rod", getHeight() * 3 / 8);
+                cdmakeRect(getWidth(), getHeight() / 4, 0, getHeight() / 2, Color.yellow);
+                cdmakeText("Second Life", getHeight() * 5 / 8);
+                cdmakeRect(getWidth(), getHeight() / 4, 0, getHeight() * 3 / 4, Color.green);
+                cdmakeText("Freeze", getHeight() * 7 / 8);
+                cdmakeText("Choose a powerup:", getHeight() / 8);
+                mouseClickMethod(chooseMode);
+            }
+
+            function chooseMode(e) {
+
+                if (e.getX() < 60 && e.getY() < 60) {
+                    removeAll();
+                    stopAllTimers();
+                    start();
+                    cdoption.splice(0, cdoption.length);
+                    cdtxts.splice(0, cdoption.length);
+
+                    cdmode = 0;
+                    cdtimer = 90;
+                    cdballs.splice(0, cdballs.length);
+                    cdused = false;
+                    cdon = false;
+                    seccdondLife = false;
+
+                    cdstarting = 0;
+                } else {
+                    if (cdmode == 0) {
+                        if (cdoption[0].containsPoint(e.getX(), e.getY())) {
+                            cdmode = 1;
+                            setUp();
+                        } else if (cdoption[1].containsPoint(e.getX(), e.getY())) {
+                            cdmode = 2;
+                            setUp();
+                        } else if (cdoption[2].containsPoint(e.getX(), e.getY())) {
+                            cdmode = 3;
+                            setUp();
+                        }
+                    }
+                }
+            }
+
+            function cdmakeText(message, y) {
+                var txt = new Text(message, "20pt Verdana");
+                txt.setPosition(getWidth() / 2 - txt.getWidth() / 2, y + txt.getHeight() / 2);
+                cdtxts.push(txt);
+                add(txt);
+            }
+
+            function cdmakeRect(width, height, x, y, color) {
+                var rect = new Rectangle(width, height);
+                rect.setPosition(x, y);
+                rect.setColor(color);
+                cdoption.push(rect);
+                add(rect);
+            }
+
+            function setUp() {
+                cdMusic.play();
+                while (cdoption.length > 0) {
+                    cdoption.pop();
+                }
+                while (cdoption.length > 0) {
+                    cdtxts.pop();
+                }
+                stopAllTimers();
+                removeAll();
+                var flagpole = new Rectangle(3, 50);
+                flagpole.setPosition(getWidth() / 2 - 6, 380);
+                flagpole.setColor("#8B4513");
+                add(flagpole);
+                var flagrect = new Rectangle(20, 10);
+                flagrect.setPosition(getWidth() / 2 - 6, 380);
+                flagrect.setColor(Color.red);
+                add(flagrect);
+
+                cdmakeRect(getWidth(), getHeight() / 5, 0, 0, Color.black);
+                backButton();
+                cdscore = new Text("Time: " + cdtimer, "25pt Verdana");
+                cdscore.setPosition(getWidth() * 3 / 5, getHeight() / 10 + cdscore.getHeight() / 2);
+                cdscore.setColor(Color.white);
+                add(cdscore);
+                cdmakeRect(50, 50, getWidth() / 2 - 50, getHeight() / 10 - 25, Color.cyan);
+                cdmakeRect(40, 70, getWidth() / 2 - 25, getHeight() - 70, "#596871");
+                cddefenseLine = new Line(getWidth() / 3, getHeight() * 2 / 3, getWidth() * 2 / 3, getHeight() * 2 / 3);
+                cddefenseLine.setPosition(getWidth() / 3, getHeight() * 2 / 3);
+                cddefenseLine.setLineWidth(15);
+                add(cddefenseLine);
+
+
+
+
+
+                setTimer(updateTime, 1000);
+                setTimer(botThrow, 3000);
+                setTimer(cdmoveBall, 25);
+                mouseMoveMethod(moveLine);
+                mouseClickMethod(ability);
+            }
+
+            function moveLine(e) {
+                if (!cdused) {
+                    if (e.getX() > getWidth() / 6 && e.getX() < getWidth() * 5 / 6) {
+                        while (e.getX() > cddefenseLine.getX() + getWidth() / 6) {
+                            cddefenseLine.move(1, 0);
+                        }
+                        while (e.getX() < cddefenseLine.getX() + getWidth() / 6) {
+                            cddefenseLine.move(-1, 0);
+                        }
+                    }
+                } else {
+                    if (e.getX() > getWidth() / 6 + 37.5 && e.getX() < getWidth() * 5 / 6 - 37.5) {
+                        while (e.getX() > cddefenseLine.getX() + getWidth() / 6 + 37.5) {
+                            cddefenseLine.move(1, 0);
+                        }
+                        while (e.getX() < cddefenseLine.getX() + getWidth() / 6 + 37.5) {
+                            cddefenseLine.move(-1, 0);
+                        }
+                    }
+                }
+            }
+
+            function botThrow() {
+                var ball = new Circle(15);
+                ball.setPosition((Randomizer.nextInt(getWidth() / 5, getWidth() * 4 / 5)), getHeight() / 5 + ball.getRadius());
+                ball.setColor(Randomizer.nextColor());
+                if (cdtimer <= 30) {
+                    do {
+                        ball.dx = Randomizer.nextInt(-5, 5);
+                        ball.dy = Randomizer.nextInt(5, 8);
+                    } while (ball.dy == 0);
+                } else {
+                    do {
+                        ball.dx = Randomizer.nextInt(-3, 3);
+                        ball.dy = Randomizer.nextInt(2, 4);
+                    } while (ball.dy == 0);
+                }
+                cdballs.push(ball);
+                add(ball);
+
+            }
+
+            function cdmoveBall() {
+
+                for (var i = 0; i < cdballs.length; i++) {
+                    cdballs[i].move(cdballs[i].dx, cdballs[i].dy);
+                    if (cdballs[i].getX() + cdballs[i].getRadius() >= getWidth() || cdballs[i].getX() - cdballs[i].getRadius() <= 0) {
+                        cdballs[i].dx = -cdballs[i].dx;
+                    } else if (cdballs[i].getY() + cdballs[i].getRadius() >= getHeight() || cdballs[i].getY() - cdballs[i].getRadius() * 2 <= getWidth() / 5) {
+                        cdballs[i].dy = -cdballs[i].dy;
+                    }
+                    if (cdoption[2].containsPoint(cdballs[i].getX(), cdballs[i].getY())) {
+                        if (seccdondLife) {
+                            remove(cdballs[i]);
+                            cdballs.remove(i);
+                            seccdondLife = false;
+                            remove(seccdondText)
+                        } else {
+                            lose();
+                        }
+                    } else if ((cdballs[i].getX() > cddefenseLine.getX() && cdballs[i].getX() < cddefenseLine.getEndX()) && (cdballs[i].getY() > cddefenseLine.getY() && cdballs[i].getY() < cddefenseLine.getEndY() + 15)) {
+                        remove(cdballs[i]);
+                        cdballs.remove(i);
+                    }
+                }
+            }
+
+            function updateTime() {
+                cdtimer--;
+                cdscore.setText("Time: " + cdtimer);
+                if (cdtimer == 60) {
+                    remove(cdabilityShot);
+                    cdabilityShot = new Text("Bot Ability: Ball Production", "20pt Verdana");
+                    cdabilityShot.setPosition(getWidth() / 2 - cdabilityShot.getWidth() / 2, getHeight() / 2 + cdabilityShot.getHeight() / 2);
+                    add(cdabilityShot);
+                    stopTimer(botThrow);
+                    setTimer(botThrow, 1500);
+                } else if (cdtimer == 55) {
+                    remove(cdabilityShot);
+                } else if (cdtimer == 30) {
+                    cdabilityShot = new Text("Bot Ability: Faster Balls", "20pt Verdana");
+                    cdabilityShot.setPosition(getWidth() / 2 - cdabilityShot.getWidth() / 2, getHeight() / 2 + cdabilityShot.getHeight() / 2);
+                    add(cdabilityShot);
+                } else if (cdtimer == 25) {
+                    remove(cdabilityShot);
+                } else if (cdtimer == 0) {
+                    win();
+                }
+            }
+
+            function ability(e) {
+
+                if (e.getX() < 60 && e.getY() < 60) {
+                    cdMusic.pause();
+                    removeAll();
+                    stopAllTimers();
+                    start();
+                    cdoption.splice(0, cdoption.length);
+                    cdtxts.splice(0, cdoption.length);
+
+                    cdmode = 0;
+                    cdtimer = 90;
+                    cdballs.splice(0, cdballs.length);
+                    cdused = false;
+                    cdon = false;
+                    seccdondLife = false;
+
+
+                    cdstarting = 0;
+                } else {
+                    if (cdoption[1].getColor() == Color.cyan && cdoption[1].containsPoint(e.getX(), e.getY())) {
+                        if (cdmode == 1) {
+                            cddefenseLine.setEndpoint(cddefenseLine.getEndX() + 37.5, cddefenseLine.getY());
+                            cddefenseLine.setPosition(cddefenseLine.getX() - 37.5, cddefenseLine.getY());
+                            remove(cdabilityShot);
+                            cdabilityShot = new Text("Player Ability: Long Rod", "20pt Verdana");
+                            cdabilityShot.setPosition(getWidth() / 2 - cdabilityShot.getWidth() / 2, getHeight() / 2 + cdabilityShot.getHeight() / 2);
+                            add(cdabilityShot);
+                            cdoption[1].setColor(Color.grey);
+                            cdstarting = cdtimer;
+                            cdused = true;
+                            setTimer(cdAbilityTime, 1000);
+                        } else if (cdmode == 2) {
+                            remove(cdabilityShot);
+                            cdabilityShot = new Text("Player Ability: Second Life", "20pt Verdana");
+                            cdabilityShot.setPosition(getWidth() / 2 - cdabilityShot.getWidth() / 2, getHeight() / 2 + cdabilityShot.getHeight() / 2);
+                            add(cdabilityShot);
+                            seccdondLife = true;
+                            seccdondText = new Text("2", "20pt Verdana");
+                            seccdondText.setPosition(getWidth() / 2 - seccdondText.getWidth() / 2 - 5, cdoption[2].getY() + cdoption[2].getHeight() / 2 + seccdondText.getHeight() / 2);
+                            add(seccdondText);
+                            cdoption[1].setColor(Color.grey);
+                            cdstarting = cdtimer;
+                            setTimer(cdAbilityTime, 1000);
+                        } else if (cdmode == 3) {
+                            remove(cdabilityShot);
+                            cdabilityShot = new Text("Player Ability: Freeze", "20pt Verdana");
+                            cdabilityShot.setPosition(getWidth() / 2 - cdabilityShot.getWidth() / 2, getHeight() / 2 + cdabilityShot.getHeight() / 2);
+                            add(cdabilityShot);
+                            stopTimer(botThrow);
+                            stopTimer(cdmoveBall);
+                            cdoption[1].setColor(Color.grey);
+                            cdstarting = cdtimer;
+                            setTimer(cdAbilityTime, 1000);
+                        }
+                    }
+                }
+            }
+
+            function cdAbilityTime() {
+                if (cdtimer == cdstarting - 5) {
+                    remove(cdabilityShot);
+                }
+                if (cdmode == 1) {
+                    if (cdtimer == cdstarting - 15) {
+                        stopTimer(cdAbilityTime);
+                        cddefenseLine.setEndpoint(cddefenseLine.getEndX() - 37.5, cddefenseLine.getY());
+                        cddefenseLine.setPosition(cddefenseLine.getX() + 37.5, cddefenseLine.getY());
+                    }
+                } else if (cdmode == 3) {
+                    if (cdtimer == cdstarting - 10) {
+                        if (cdtimer <= 30) {
+                            setTimer(botThrow, 1500);
+                        } else {
+                            setTimer(botThrow, 3000);
+                        }
+                        setTimer(cdmoveBall, 25);
+                        stopTimer(cdAbilityTime);
+                    }
+                }
+            }
+
+            function lose() {
+
+                removeAll();
+                cdMusic.pause();
+                stopAllTimers();
+                while (cdoption.lenght > 0) {
+                    cdoption.pop();
+                }
+                while (cdballs.lenght > 0) {
+                    cdballs.pop();
+                }
+                while (cdtxts.lenght > 0) {
+                    cdtxts.pop();
+                }
+                var rect = new Rectangle(getWidth(), getHeight());
+                rect.setPosition(0, 0);
+                rect.setColor(Color.red);
+                add(rect);
+                cdmakeText("You Lose!", getHeight() / 2);
+                backButton();
+            }
+
+            function win() {
+
+                removeAll();
+                cdMusic.pause();
+                stopAllTimers();
+                while (cdoption.lenght > 0) {
+                    cdoption.pop();
+                }
+                while (cdballs.lenght > 0) {
+                    cdballs.pop();
+                }
+                while (cdtxts.lenght > 0) {
+                    cdtxts.pop();
+                }
+                var rect = new Rectangle(getWidth(), getHeight());
+                rect.setPosition(0, 0);
+                rect.setColor(Color.green);
+                add(rect);
+                cdmakeText("You Win!", getHeight() / 2);
+                backButton();
+            }
+
+
+
+
+            var sjGround;
+            var spike;
+            var sjRADIUS = 15;
+            var sjface;
+            var sjscore = 0;
+            var sjgameOver = false;
+            var bird;
+            var fly;
+            var wings;
+            var sjpoints;
+
+            //Sets up screen, calls other functions.
+            function startJump() {
+                cdMusic.play();
+                createCanvasJump();
+                createObstacles();
+                sjpoints = new Text("Score: " + sjscore, "20pt Verdana");
+                sjpoints.setPosition(getWidth() - 135, getHeight() - 20);
+                sjpoints.setColor(Color.white);
+                add(sjpoints);
+                createBirds();
+                mouseClickMethod(mouseJump);
+                setTimer(moveCanvas, 50);
+                sjface = new Rectangle(sjRADIUS * 2, sjRADIUS * 2);
+                sjface.setPosition(sjRADIUS, getHeight() - getHeight() / 5 - sjRADIUS * 2);
+                sjface.setColor(Color.blue);
+                add(sjface);
+
+            }
+
+            //Creates the start canvas.
+            function createCanvasJump() {
+
+                var sky = new Rectangle(getWidth(), getHeight());
+                sky.setPosition(0, 0);
+                sky.setColor("#98ddfa");
+                add(sky);
+                sjGround = new Rectangle(getWidth(), getHeight() / 5);
+                sjGround.setPosition(0, getHeight() - getHeight() / 5);
+                sjGround.setColor("#b38d42");
+                add(sjGround);
+            }
+
+            //Creates the spikes.
+            function createObstacles() {
+                spike = new Rectangle(sjRADIUS * 2, sjRADIUS * 5);
+                spike.setPosition(getWidth() - sjRADIUS, getHeight() - getHeight() / 5 - sjRADIUS * 5);
+                spike.setColor("#227a32");
+                add(spike);
+            }
+
+            //Makes a random chance of a bird spawning.
+            function createBirds() {
+                var color = Randomizer.nextColor();
+                var chance = Randomizer.nextInt(1, 10);
+                if (chance <= 7) {
+                    fly = true;
+                    bird = new Rectangle(35, 15);
+                    bird.setPosition(getWidth() - bird.getWidth(), getHeight() / 3);
+                    bird.setColor(Color.orange);
+                    add(bird);
+                    wings = new Rectangle(10, 30);
+                    wings.setPosition(bird.getX() + bird.getWidth() / 2 - wings.getWidth() / 2, bird.getY() - (bird.getHeight() - 15 / 2));
+                    wings.setColor(Color.orange);
+                    add(wings);
+                }
+            }
+
+            //Makes the spikes and birds move
+            function moveCanvas() {
+                var randomX = Randomizer.nextInt(-10, -5);
+                var randomX2 = Randomizer.nextInt(-4, -8);
+                spike.move(randomX2, 0);
+                if (fly == true) {
+                    bird.move(randomX - 0.5, 0);
+                    wings.move(randomX - 0.5, 0);
+                }
+                sjcollision();
+                if (spike.getX() + spike.getWidth() <= 0) {
+                    createObstacles();
+                    createBirds();
+                    sjscore++;
+                    sjpoints.setText("Score: " + sjscore);
+                }
+            }
+
+            //Calls the trueJump function on user mouse Click command.
+            function mouseJump(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    removeAll();
+                    stopAllTimers();
+                    start();
+                    cdMusic.pause();
+                    sjscore = 0;
+                    sjgameOver = false;
+
+                }
+                if (sjgameOver == false && sjface.getY() >= getHeight() - getHeight() / 5 - 15 * 2) {
+                    setTimer(trueJump, 20);
+                }
+            }
+
+            //Moves the block up.
+            function trueJump() {
+                if (sjface.getY() <= getHeight() / 3) {
+                    stopTimer(trueJump);
+                    setTimer(comeDown, 20);
+                } else {
+                    sjface.move(0, -5);
+                }
+            }
+
+            //Brings the block back down.
+            function comeDown() {
+                if (sjface.getY() + sjface.getHeight() >= getHeight() - getHeight() / 5) {
+                    stopTimer(comeDown);
+                } else {
+                    sjface.move(0, 5);
+                }
+            }
+
+            //Checks for collision of spike or bird
+            function sjcollision() {
+                if (spike.containsPoint(sjface.getX() + sjface.getWidth() / 2, sjface.getY())) {
+                    stopTimer(moveCanvas);
+                    stopTimer(trueJump);
+                    stopTimer(comeDown);
+                    playerScore();
+                }
+                if (fly == true) {
+                    if (bird.containsPoint(sjface.getX() + sjface.getWidth() / 2, sjface.getY())) {
+                        stopTimer(moveCanvas);
+                        stopTimer(trueJump);
+                        stopTimer(comeDown);
+                        playerScore();
+                    }
+                }
+            }
+
+            //Game over text
+            function playerScore() {
+                remove(sjpoints);
+                var game = new Text("Game Over", "40pt Verdana");
+                game.setPosition(getWidth() / 2 - game.getWidth() / 2, getHeight() / 2 - 50);
+                game.setColor(Color.red);
+                add(game);
+                var txt = new Text("Your score was: " + sjscore, "20pt Verdana");
+                txt.setPosition(getWidth() / 2 - txt.getWidth() / 2, getHeight() / 2 + 50);
+                txt.setColor(Color.black);
+                add(txt);
+                sjgameOver = true;
+                cdMusic.pause();
+                sjscore = 0;
+            }
+
+
+
+            //Archery
+            //var RELOAD_SOUND = new Sound("https://dl.dropboxusercontent.com/s/f7r0jea1n9g21ys/shotgunReload.mp3");
+            //var SHOOT_SOUND = new Sound("https://dl.dropboxusercontent.com/s/mjdoiz3w6ibtir1/shotGunBlast.mp3");
+            var aPOINTS_PER_KILL = 100;
+            //var archeryMusic = new Audio("https://codehs.com/uploads/c50d940712e47a15c195d74ae508636e");
+            var TARGET_RADIUS = 30;
+            var line;
+            var line2;
+            var axline1;
+            var axline2;
+            var axline3;
+            var axline4;
+            var whiteCirc;
+            var blackCirc;
+            var blueCirc;
+            var redCirc;
+            var yellowCirc;
+            var ascore = 0;
+            var acolor = "#dcd9ff";
+            var adx = 10;
+            var ary = Randomizer.nextInt(0, 400);
+            var accuracy = 100;
+            var accuracyCount = 100;
+            var shots = 0;
+            var shotsCount;
+            var atimer = 15;
+            var atimerCount;
+            var bonus;
+            var ai;
+            var hit = 0;
+            var miss = 0;
+            var accuracyBonus = 0;
+            var baseScore = 0;
+            var finalScore = 0;
+
+            function agameOver() {
+                //reset
+
+                cdMusic.pause();
+                removeAll();
+                stopAllTimers();
+                mouseClickMethod(empty);
+                var layout = new Rectangle(getWidth(), getHeight());
+                layout.setPosition(0, 0);
+                layout.setColor("#fcba03");
+                add(layout);
+
+                var txt = new Text("GAME OVER", "40pt Verdana");
+                txt.setPosition((getWidth() / 2) - (txt.getWidth() / 2), 100);
+                txt.setColor(Color.RED);
+                add(txt);
+
+                var accuracyDisplay = new Text("Accuracy: " + accuracy + "%", "30pt Verdana");
+                accuracyDisplay.setPosition(txt.getX(), 250);
+                accuracyDisplay.setColor("#1f802f");
+                add(accuracyDisplay);
+
+                var scoreDisplay = new Text("Score: " + ascore, "30pt Verdana");
+                scoreDisplay.setPosition(txt.getX(), 390);
+                scoreDisplay.setColor("#544394");
+                add(scoreDisplay);
+                mouseClickMethod(collectionback);
+                atimer = 15;
+                ascore = 0;
+                accuracy = 100;
+                hit = 0;
+                miss = 0;
+                accuracyBonus = 0;
+                baseScore = 0;
+                finalScore = 0;
+                backButton();
+
+
+
+            }
+
+            function aimer() { //for aiming
+                line = new Line(0, 0, getWidth(), 0);
+                line2 = new Line(0, 0, getHeight(), 0);
+                line2.setLineWidth(2);
+                line.setLineWidth(2);
+                add(line);
+                line.setColor(Color.orange);
+                line2.setColor(Color.orange);
+                add(line2);
+                cdMusic.play();
+                mouseClickMethod(drawX);
+                mouseMoveMethod(moveAimer);
+            }
+
+            function drawX(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    removeAll();
+                    stopAllTimers();
+                    start();
+                    cdMusic.pause();
+                    atimer = 15;
+                    ascore = 0;
+                    accuracy = 100;
+                    hit = 0;
+                    miss = 0;
+                    accuracyBonus = 0;
+                    baseScore = 0;
+                    finalScore = 0;
+
+
+                }
+                if (!(e.getX() < 60 && e.getY() < 60)) {
+                    axline1 = new Line(e.getX(), e.getY(), e.getX() - 4, e.getY() - 4);
+                    axline1.setPosition(e.getX(), e.getY());
+                    add(axline1);
+
+                    axline2 = new Line(e.getX(), e.getY(), e.getX() - 4, e.getY() + 4);
+                    axline2.setPosition(e.getX(), e.getY());
+                    add(axline2);
+
+                    axline3 = new Line(e.getX(), e.getY(), e.getX() + 4, e.getY() - 4);
+                    axline3.setPosition(e.getX(), e.getY());
+                    add(axline3);
+
+                    axline4 = new Line(e.getX(), e.getY(), e.getX() + 4, e.getY() + 4);
+                    axline4.setPosition(e.getX(), e.getY());
+                    add(axline4);
+                }
+
+            }
+
+            function moveAimer(e) { //for target
+
+                line.setPosition(0, e.getY());
+                line.setEndpoint(getWidth(), e.getY());
+                line2.setPosition(e.getX(), 0);
+                line2.setEndpoint(e.getX(), getHeight());
+            }
+
+            function target() {
+                var copyRad = TARGET_RADIUS;
+                var radDecrement = TARGET_RADIUS / 5;
+                var circCounter = 0;
+
+                whiteCirc = new Circle(copyRad);
+                whiteCirc.setPosition(40, 400);
+                whiteCirc.setColor(Color.WHITE);
+                add(whiteCirc);
+                circCounter++;
+
+                blackCirc = new Circle(copyRad - radDecrement * circCounter);
+                blackCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                blackCirc.setColor(Color.BLACK);
+                add(blackCirc);
+                circCounter++;
+
+                blueCirc = new Circle(copyRad - radDecrement * circCounter);
+                blueCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                blueCirc.setColor(Color.BLUE);
+                add(blueCirc);
+                circCounter++;
+
+                redCirc = new Circle(copyRad - radDecrement * circCounter);
+                redCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                redCirc.setColor(Color.RED);
+                add(redCirc);
+                circCounter++;
+
+                yellowCirc = new Circle(copyRad - radDecrement * circCounter);
+                yellowCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                yellowCirc.setColor(Color.YELLOW);
+                add(yellowCirc);
+                circCounter++;
+            }
+
+            function moveTarget() {
+                var targetdy = Randomizer.nextInt(-5, 5);
+
+                whiteCirc.move(adx, targetdy);
+                blackCirc.move(adx, targetdy);
+                blueCirc.move(adx, targetdy);
+                redCirc.move(adx, targetdy);
+                yellowCirc.move(adx, targetdy);
+
+                if (whiteCirc.getX() >= getWidth()) { //bring back target if it hit the edge
+                    whiteCirc.setPosition(40, Randomizer.nextInt(100, 400));
+                    blackCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    blueCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    redCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    yellowCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                }
+            }
+
+            function shootTarget(e) {
+
+                if (e.getX() < 60 && e.getY() < 60) {
+                    removeAll();
+                    stopAllTimers();
+                    start();
+                    cdMusic.pause();
+                    atimer = 15;
+                    ascore = 0;
+                    accuracy = 100;
+                    hit = 0;
+                    miss = 0;
+                    accuracyBonus = 0;
+                    baseScore = 0;
+                    finalScore = 0;
+
+                }
+                var elem = getElementAt(e.getX(), e.getY());
+
+                remove(axline1);
+                remove(axline2);
+                remove(axline3);
+                remove(axline4);
+                if (!(e.getX() < 60 && e.getY() < 60)) {
+                    axline1 = new Line(e.getX(), e.getY(), e.getX() - 4, e.getY() - 4);
+                    axline1.setPosition(e.getX(), e.getY());
+                    axline1.setColor("#ff21d6");
+                    add(axline1);
+
+                    axline2 = new Line(e.getX(), e.getY(), e.getX() - 4, e.getY() + 4);
+                    axline2.setPosition(e.getX(), e.getY());
+                    axline2.setColor("#ff21d6");
+                    add(axline2);
+
+                    axline3 = new Line(e.getX(), e.getY(), e.getX() + 4, e.getY() - 4);
+                    axline3.setPosition(e.getX(), e.getY());
+                    axline3.setColor("#ff21d6");
+                    add(axline3);
+
+                    axline4 = new Line(e.getX(), e.getY(), e.getX() + 4, e.getY() + 4);
+                    axline4.setPosition(e.getX(), e.getY());
+                    axline4.setColor("#ff21d6");
+                    add(axline4);
+                }
+
+                if (elem != null && elem.getColor() == Color.WHITE) {
+                    whiteCirc.setPosition(-35, Randomizer.nextInt(100, 400));
+                    blackCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    blueCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    redCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    yellowCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+
+                    axline1.setColor("#ffffff");
+                    axline2.setColor("#ffffff");
+                    axline3.setColor("#ffffff");
+                    axline4.setColor("#ffffff");
+
+                    hit += 1;
+                    ascore += 1;
+                    moveTarget();
+                } else if (elem != null && elem.getColor() == Color.BLACK) {
+                    whiteCirc.setPosition(-35, Randomizer.nextInt(100, 400));
+                    blackCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    blueCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    redCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    yellowCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+
+                    axline1.setColor("#000000");
+                    axline2.setColor("#000000");
+                    axline3.setColor("#000000");
+                    axline4.setColor("#000000");
+
+                    hit += 1;
+                    ascore += 2;
+                    moveTarget();
+                } else if (elem != null && elem.getColor() == Color.BLUE) {
+                    whiteCirc.setPosition(-35, Randomizer.nextInt(100, 400));
+                    blackCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    blueCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    redCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    yellowCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+
+
+
+                    axline1.setColor("#0020ad");
+                    axline2.setColor("#0020ad");
+                    axline3.setColor("#0020ad");
+                    axline4.setColor("#0020ad");
+
+                    hit += 1;
+                    ascore += 3;
+                    moveTarget();
+                } else if (elem != null && elem.getColor() == Color.RED) {
+                    whiteCirc.setPosition(-35, Randomizer.nextInt(100, 400));
+                    blackCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    blueCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    redCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    yellowCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+
+                    axline1.setColor("#eb3f6a");
+                    axline2.setColor("#eb3f6a");
+                    axline3.setColor("#eb3f6a");
+                    axline4.setColor("#eb3f6a");
+
+                    hit += 1;
+                    ascore += 4;
+                    moveTarget();
+                } else if (elem != null && elem.getColor() == Color.YELLOW) {
+                    whiteCirc.setPosition(-35, Randomizer.nextInt(100, 400));
+                    blackCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    blueCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    redCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+                    yellowCirc.setPosition(whiteCirc.getX(), whiteCirc.getY());
+
+                    axline1.setColor("#ffea05");
+                    axline2.setColor("#ffea05");
+                    axline3.setColor("#ffea05");
+                    axline4.setColor("#ffea05");
+
+
+                    hit += 1;
+                    ascore += 5;
+                    moveTarget();
+                } else { //click on not target
+                    miss++;
+                }
+
+                remove(shotsCount);
+                shots++;
+                shotsCount = new Text("Score: " + ascore, "15pt Verdana");
+                shotsCount.setPosition(300, 20);
+                shotsCount.setColor(acolor);
+                add(shotsCount);
+
+                accuracy = Math.floor((hit / (hit + miss)) * 100);
+                accuracyCount.setText("Accuracy: " + accuracy + "%");
+            }
+            function empty() {
+
+            }
+            function changeTimer() {
+                if (atimer > 0) {//when timer is greater than 0
+                    atimer--;
+                    atimerCount.setText("T: " + atimer);
+                } else {//when timer is 0
+                    agameOver();
+                }
+            }
+
+
+
+
+
+            //Collection
+            var cBALL_RAD = 17;
+            var cDELAY = 40;
+            var cSTART_SPEED = 5;
+            var cball;
+            var ctimer = 0;
+            var cmainCircle;
+            var choleCircle;
+            var cbasket;
+            var cgrass;
+            var csky;
+            var cballArr = [];
+            var cscore = 0;
+            var cscoreText;
+            // Text Constants
+            var cGAME_OVER_FONT = "40pt Verdana";
+            var cSCORE_FONT = "30pt Verdana";
+            var cgoTxt;
+            var csTxt;
+            var ctimerTxt;
+
+
+
+            function cmakeGrass() {
+                cdMusic.play();
+                cgrass = new Rectangle(getWidth() + 10, 0.2 * getHeight());
+                cgrass.setPosition(0, 0.8 * getHeight());
+                cgrass.setColor("#90ee90");
+                add(cgrass);
+                backButton();
+                mouseClickMethod(collectionback);
+
+            }
+
+            function cmakeSky() {
+                csky = new Rectangle(getWidth() + 10, 0.8 * getHeight());
+                csky.setPosition(0, 0);
+                csky.setColor("#87ceeb");
+                add(csky);
+            }
+            function cmakeBall() {
+
+                cball = new Circle(cBALL_RAD);
+                cball.setPosition(Randomizer.nextInt(cBALL_RAD, getWidth() - cBALL_RAD), 0);
+                var rand = Randomizer.nextInt(1, 25);
+                if (rand >= 1 && rand <= 4) {
+                    cball.setColor("#30ff49");
+                } else if (rand >= 5 && rand <= 8) {
+                    cball.setColor("#27961d");
+                } else if (rand >= 9 && rand <= 12) {
+                    cball.setColor("#c93838");
+                } else if (rand >= 13 && rand <= 16) {
+                    cball.setColor("#ff3636");
+                } else if (rand >= 17 && rand <= 19) {
+                    cball.setColor(Color.white);
+                } else if (rand >= 20) {
+                    cball.setColor(Color.black);
+                }
+                cball.dy = Randomizer.nextInt(3, 6);
+                cballArr.push(cball);
+                add(cball);
+
+            }
+            function cmakeBall() {
+
+                cball = new Circle(cBALL_RAD);
+                cball.setPosition(Randomizer.nextInt(cBALL_RAD, getWidth() - cBALL_RAD), 0);
+
+                var rand = Randomizer.nextInt(1, 25);
+                if (rand >= 1 && rand <= 4) {
+                    cball.setColor("#30ff49");
+                } else if (rand >= 5 && rand <= 8) {
+                    cball.setColor("#27961d");
+                } else if (rand >= 9 && rand <= 12) {
+                    cball.setColor("#c93838");
+                } else if (rand >= 13 && rand <= 16) {
+                    cball.setColor("#ff3636");
+                } else if (rand >= 17 && rand <= 19) {
+                    cball.setColor(Color.white);
+                } else if (rand >= 20) {
+                    cball.setColor(Color.black);
+                }
+                cball.dy = Randomizer.nextInt(3, 6);
+                cballArr.push(cball);
+                add(cball);
+
+            }
+            function cmoveBall() {
+                for (var i = 0; i < cballArr.length; i++) {
+                    var q = cballArr[i];
+                    q.move(0, q.dy);
+                    if (q.getY() > getHeight()) {
+                        remove(cballArr[i]);
+                        remove(q);
+                    }
+                }
+                ccollision();
+            }
+            function cmakeBasket() {
+
+
+                cbasket = new Rectangle(65, 55);
+                cbasket.setPosition(172.5, 420);
+                cbasket.setColor(Color.orange);
+                add(cbasket);
+
+                cmainCircle = new Circle(27);
+                cmainCircle.setPosition(getWidth() / 2 + 5, 430);
+                cmainCircle.setColor(Color.orange);
+                add(cmainCircle);
+
+                choleCircle = new Circle(18);
+                choleCircle.setPosition(getWidth() / 2 + 5, 430);
+                choleCircle.setColor("#90ee90");
+                add(choleCircle);
+                add(cbasket);
+
+            }
+            function collectionback(e) {
+                if (e.getX() < 60 && e.getY() < 60) {
+                    removeAll();
+                    stopAllTimers();
+                    start();
+                    cdMusic.pause();
+                    cballArr.splice(0, cballArr.length);
+                    cscore = 0;
+                }
+            }
+            function cmoveBasket(e) {
+
+                cmainCircle.setPosition(e.getX(), cmainCircle.getY());
+                choleCircle.setPosition(e.getX(), choleCircle.getY());
+                cbasket.setPosition(e.getX() - 32.5, cbasket.getY());
+
+            }
+            function ccollision(e) {
+                var elem2 = getElementAt(cmainCircle.getX(), cmainCircle.getY() - 10);
+                if (elem2 != null && elem2.getColor() == "#30ff49") {
+
+                    cscore += 1;
+                    cscoreText.setText(cscore);
+                    remove(elem2);
+                } else if (elem2 != null && elem2.getColor() == "#27961d") {
+
+                    cscore += 1;
+                    cscoreText.setText(cscore);
+                    remove(elem2);
+                } else if (elem2 != null && elem2.getColor() == "#ff3636") {
+
+                    cscore -= 1;
+                    cscoreText.setText(cscore);
+                    remove(elem2);
+                } else if (elem2 != null && elem2.getColor() == "#c93838") {
+
+                    cscore -= 2;
+                    cscoreText.setText(cscore);
+                    remove(elem2);
+                } else if (elem2 != null && elem2.getColor() == Color.black) {
+
+                    cgameover();
+                    stopAllTimers();
+                } else if (elem2 != null && elem2.getColor() == Color.white) {
+
+                    cscore += 5;
+                    cscoreText.setText(cscore);
+                    remove(elem2);
+                }
+                if (cscore < 0) {
+                    cscore = 0;
+                    cscoreText.setText(cscore);
+                }
+
+            }
+
+            function cgameover() {
+
+                removeAll();
+                cmakeGrass();
+                cmakeSky();
+                stopAllTimers();
+                cgoTxt = new Text("GAME OVER", "38pt Verdana");
+                csTxt = new Text("Your score was: " + cscore, "25pt Verdana");
+                cgoTxt.setPosition(getWidth() / 2 - cgoTxt.getWidth() / 2, 200);
+                cgoTxt.setColor(Color.red);
+                csTxt.setPosition(getWidth() / 2 - csTxt.getWidth() / 2, 300);
+                add(cgoTxt);
+                add(csTxt);
+                cballArr.splice(0, cballArr.length);
+                cscore = 0;
+                cdMusic.pause();
+                backButton();
+            }
+            if (typeof start === 'function') {
+                start();
+            }
+        }
+    </script>
+
+</body>
